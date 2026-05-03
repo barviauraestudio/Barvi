@@ -7,24 +7,24 @@ interface AudioPlayerProps {
 export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [playing, setPlaying] = useState(false)
-  const [started, setStarted] = useState(false)
+  const startedRef = useRef(false)
   const fadeInRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const fadeOutRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const clearFade = () => {
-    if (fadeInRef.current) clearInterval(fadeInRef.current)
-    if (fadeOutRef.current) clearInterval(fadeOutRef.current)
+    if (fadeInRef.current) { clearInterval(fadeInRef.current); fadeInRef.current = null }
+    if (fadeOutRef.current) { clearInterval(fadeOutRef.current); fadeOutRef.current = null }
   }
 
   const fadeIn = () => {
     clearFade()
     const audio = audioRef.current
     if (!audio) return
-    let v = 0
+    audio.volume = 0
     fadeInRef.current = setInterval(() => {
-      v = Math.min(v + 0.03, 0.55)
-      audio.volume = v
-      if (v >= 0.55) clearInterval(fadeInRef.current!)
+      const next = Math.min(audio.volume + 0.03, 0.55)
+      audio.volume = next
+      if (next >= 0.55) { clearInterval(fadeInRef.current!); fadeInRef.current = null }
     }, 80)
   }
 
@@ -32,39 +32,44 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
     clearFade()
     const audio = audioRef.current
     if (!audio) return
-    let v = audio.volume
     fadeOutRef.current = setInterval(() => {
-      v = Math.max(v - 0.05, 0)
-      audio.volume = v
-      if (v <= 0) {
-        clearInterval(fadeOutRef.current!)
+      const next = Math.max(audio.volume - 0.05, 0)
+      audio.volume = next
+      if (next <= 0) {
+        clearInterval(fadeOutRef.current!); fadeOutRef.current = null
         cb?.()
       }
     }, 40)
   }
 
+  // Called once on the very first user interaction anywhere on the page
   const startAudio = () => {
+    if (startedRef.current) return
+    startedRef.current = true
     const audio = audioRef.current
-    if (!audio || started) return
-    setStarted(true)
-    audio.muted = false
+    if (!audio) return
     audio.volume = 0
-    audio.play().then(() => {
-      fadeIn()
-      setPlaying(true)
-    }).catch(() => setPlaying(false))
+    audio.play()
+      .then(() => { fadeIn(); setPlaying(true) })
+      .catch(() => { /* autoplay still blocked — user must press button */ })
   }
 
+  // Button click: if audio hasn't started yet, start it;
+  // otherwise toggle play/pause
   const handleButtonClick = (e: React.MouseEvent) => {
     e.stopPropagation()
     const audio = audioRef.current
     if (!audio) return
-    if (!started) { startAudio(); return }
+
+    if (!startedRef.current) {
+      startAudio()
+      return
+    }
+
     if (!audio.paused) {
       fadeOut(() => audio.pause())
       setPlaying(false)
     } else {
-      audio.volume = 0
       audio.play().catch(() => {})
       fadeIn()
       setPlaying(true)
@@ -72,16 +77,20 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
   }
 
   useEffect(() => {
-    const handler = () => startAudio()
-    document.addEventListener('click', handler, { once: true })
-    return () => document.removeEventListener('click', handler)
-  }, [started]) // eslint-disable-line react-hooks/exhaustive-deps
+    // Listen for the first interaction anywhere on the page
+    const onFirstInteraction = () => startAudio()
+
+    const events = ['click', 'touchstart', 'keydown'] as const
+    events.forEach(ev => document.addEventListener(ev, onFirstInteraction, { once: true, passive: true }))
+
+    return () => {
+      events.forEach(ev => document.removeEventListener(ev, onFirstInteraction))
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
-      <audio ref={audioRef} loop preload="auto">
-        <source src={src} type="audio/mpeg" />
-      </audio>
+      <audio ref={audioRef} loop preload="auto" src={src} />
 
       <button
         id="audioBtn"
