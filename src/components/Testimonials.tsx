@@ -6,6 +6,7 @@ const TESTIMONIALS = [
     quote: 'Fora o alto nível de gravação e edição áudio visual, muito criativo, proativo, educado e o principal, responsabilidade com os prazos. Entrega de qualidade. Recomendo sem medo de errar.',
     author: 'Dr. Bernardo Passoni',
     initials: 'BP',
+    photo: '/foto-bernardo.jpg',
   },
   {
     quote: 'Arthur foi dedicado, criativo e muito prático. Tornou minha experiência com o marketing mais leve e confiante. Indico demais!',
