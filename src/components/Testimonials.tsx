@@ -60,7 +60,14 @@ export default function Testimonials() {
               </p>
               <div className="testimonial-footer">
                 <div className="testimonial-avatar">
-                  <span className="testimonial-avatar-initials">{t.initials}</span>
+                  {t.photo
+                    ? <img
+                        src={t.photo}
+                        alt={t.author}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+                      />
+                    : <span className="testimonial-avatar-initials">{t.initials}</span>
+                  }
                 </div>
                 <p className="testimonial-author">{t.author}</p>
               </div>
