@@ -33,11 +33,6 @@ const TESTIMONIALS = [
     photo: '/foto-rei.jpg',
   },
   {
-    quote: 'Além de enxergar nossos pontos fortes e conseguir transmitir isso nos materiais gerados, ele compreendeu a essência do negócio, gerando conteúdos muito mais profundos e relevantes.',
-    author: 'Calmaria Centro de Saúde',
-    initials: 'CC',
-  },
-  {
     quote: 'O Arthur foi peça fundamental nos primeiros passos da comunicação da nossa clínica. Além de enxergar nossos pontos fortes e conseguir transmitir isso nos materiais gerados, ele compreendeu a essência do negócio, gerando conteúdos muito mais profundos e relevantes. Isso fez toda diferença nos resultados que obtivemos a partir da parceria com ele.',
     author: 'Savini | Clínica de Saúde e Bem-Estar',
     initials: 'SV',
