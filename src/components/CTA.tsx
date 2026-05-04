@@ -21,19 +21,28 @@ export default function CTA() {
           <p className="cta-sub">
             Uma conversa. Sem compromisso.<br />Com a clareza de quem sabe exatamente o que está fazendo.
           </p>
-          <div className="cta-buttons">
-            <a href="https://wa.me/5548996534721" className="btn-primary">
-              Arthur — Agendar Conversa
-              <ArrowIcon />
-            </a>
-            <a href="https://wa.me/5548988779117" className="btn-primary">
-              Maria Helena — Agendar Conversa
-              <ArrowIcon />
-            </a>
-            <a href="mailto:Barviauraestudio@gmail.com" className="btn-secondary">
-              Enviar E-mail
-            </a>
-          </div>
+<div className="cta-buttons">
+  <a href="https://wa.me/5548996534721" className="btn-primary">
+    Arthur — Agendar Conversa <ArrowIcon />
+  </a>
+  <a href="https://wa.me/5548988779117" className="btn-primary">
+    Maria Helena — Agendar Conversa <ArrowIcon />
+  </a>
+
+  {/* NOVO — link para a consultoria */}
+  
+    href="https://consultoriabarvi.netlify.app"
+    className="btn-secondary"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Conheça a Consultoria Pessoal →
+  </a>
+
+  <a href="mailto:Barviauraestudio@gmail.com" className="btn-secondary">
+    Enviar E-mail
+  </a>
+</div>
         </div>
       </CenterWrapper>
     </section>
