@@ -40,7 +40,6 @@ export default function CTA() {
               rel="noopener noreferrer"
             >
               Conheça Nossa Consultoria
-              Consultoria
               <ArrowIcon />
             </a>
           </div>
