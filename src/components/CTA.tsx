@@ -34,7 +34,7 @@ export default function CTA() {
               Enviar E-mail
             </a>
             <a
-              href="https://consultoriabarvi.netlify.app"
+              href="https://consultoria-tawny-zeta.vercel.app"
               className="btn-secondary"
               target="_blank"
               rel="noopener noreferrer"
