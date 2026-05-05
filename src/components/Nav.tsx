@@ -28,7 +28,7 @@ export default function Nav({ menuOpen, onToggle }: Props) {
           <li><a href="#parceiros">Parceiros</a></li>
           <li><a href="#cta">Contato</a></li>
            <li>
-    <a href="https://consultoriabarvi.netlify.app" target="_blank" rel="noopener noreferrer"
+    <a href="https://consultoria-tawny-zeta.vercel.app" target="_blank" rel="noopener noreferrer"
        style={{ color: 'var(--gold)' }}>
       Consultoria ↗
     </a>
