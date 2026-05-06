@@ -12,6 +12,8 @@ export default function MobileMenu({ open, onClose }: Props) {
       <a href="#parceiros" onClick={onClose}>Parceiros</a>
       <div className="mobile-menu-line" />
       <a href="#cta" onClick={onClose}>Contato</a>
+      <a href="https://consultoria-tawny-zeta.vercel.app" target="_blank" rel="noopener noreferrer" onClick={onClose}>Consultoria ↗</a>
+      <a href="https://planos-roan.vercel.app" target="_blank" rel="noopener noreferrer" onClick={onClose}>Nossos Planos ↗</a>
       <p className="mobile-menu-contact">Urubici · Serra Catarinense</p>
     </div>
   )
