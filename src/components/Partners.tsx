@@ -1,7 +1,7 @@
 import Reveal from './Reveal'
 import CenterWrapper from './CenterWrapper'
 
-const PAST_PARTNERS = [
+const ALL_PARTNERS = [
   'Sarah Thiesen',
   'Monan — Coach Fitness',
   'Serra — Mat. de Construção',
@@ -14,9 +14,6 @@ const PAST_PARTNERS = [
   'Dr. Thiago Piva — Clínico',
   'Calmaria Centro de Saúde',
   'Parque Mundo Novo',
-]
-
-const CURRENT_PARTNERS = [
   'Buss & Siementcoski',
   'Rei Cell',
   'Pousada Vale da Ímbuia',
@@ -40,18 +37,9 @@ export default function Partners() {
           </p>
         </Reveal>
 
-        <Reveal className="partners-cols">
-          <div>
-            <p className="partners-col-label">Marcas com quem já colaboramos</p>
-            <div className="partners-past">
-              {PAST_PARTNERS.map((name) => (
-                <p className="partner-name" key={name}>{name}</p>
-              ))}
-            </div>
-          </div>
-          <div className="partners-current">
-            <p className="partners-col-label">Colaboramos atualmente</p>
-            {CURRENT_PARTNERS.map((name) => (
+        <Reveal>
+          <div className="partners-all">
+            {ALL_PARTNERS.map((name) => (
               <p className="partner-name" key={name}>{name}</p>
             ))}
           </div>
