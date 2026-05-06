@@ -43,7 +43,7 @@ export default function CTA() {
                 <ArrowIcon />
               </a>
               <a
-                href="https://consultoria-tawny-zeta.vercel.app/planos"
+                href="https://planos-roan.vercel.app"
                 className="btn-secondary"
                 target="_blank"
                 rel="noopener noreferrer"
