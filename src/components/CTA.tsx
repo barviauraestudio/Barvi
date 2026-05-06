@@ -21,27 +21,37 @@ export default function CTA() {
           <p className="cta-sub">
             Uma conversa. Sem compromisso.<br />Com a clareza de quem sabe exatamente o que está fazendo.
           </p>
-          <div className="cta-buttons">
-            <a href="https://wa.me/5548996534721" className="btn-primary">
-              Arthur — Agendar Conversa
-              <ArrowIcon />
-            </a>
-            <a href="https://wa.me/5548988779117" className="btn-primary">
-              Maria Helena — Agendar Conversa
-              <ArrowIcon />
-            </a>
-            <a href="mailto:Barviauraestudio@gmail.com" className="btn-secondary">
-              Enviar E-mail
-            </a>
-            <a
-              href="https://consultoria-tawny-zeta.vercel.app"
-              className="btn-secondary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Conheça Nossa Consultoria
-              <ArrowIcon />
-            </a>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <a href="https://wa.me/5548996534721" className="btn-primary">
+                Arthur — Agendar Conversa
+                <ArrowIcon />
+              </a>
+              <a href="https://wa.me/5548988779117" className="btn-primary">
+                Maria Helena — Agendar Conversa
+                <ArrowIcon />
+              </a>
+            </div>
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <a
+                href="https://consultoria-tawny-zeta.vercel.app"
+                className="btn-secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Conheça Nossa Consultoria
+                <ArrowIcon />
+              </a>
+              <a
+                href="https://consultoria-tawny-zeta.vercel.app/planos"
+                className="btn-secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Conheça Nossos Planos
+                <ArrowIcon />
+              </a>
+            </div>
           </div>
         </div>
       </CenterWrapper>
