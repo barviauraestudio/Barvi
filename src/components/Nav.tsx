@@ -27,12 +27,18 @@ export default function Nav({ menuOpen, onToggle }: Props) {
           <li><a href="#psicologia">Psicologia</a></li>
           <li><a href="#parceiros">Parceiros</a></li>
           <li><a href="#cta">Contato</a></li>
-           <li>
-    <a href="https://consultoria-tawny-zeta.vercel.app" target="_blank" rel="noopener noreferrer"
-       style={{ color: 'var(--gold)' }}>
-      Consultoria ↗
-    </a>
-  </li>
+          <li>
+            <a href="https://consultoria-tawny-zeta.vercel.app" target="_blank" rel="noopener noreferrer"
+               style={{ color: 'var(--gold)' }}>
+              Consultoria ↗
+            </a>
+          </li>
+          <li>
+            <a href="https://planos-roan.vercel.app" target="_blank" rel="noopener noreferrer"
+               style={{ color: 'var(--gold)' }}>
+              Nossos Planos ↗
+            </a>
+          </li>
         </ul>
         <button
           className={`hamburger${menuOpen ? ' open' : ''}`}
