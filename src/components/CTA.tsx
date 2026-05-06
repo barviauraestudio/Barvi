@@ -23,11 +23,17 @@ export default function CTA() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
-              <a href="https://wa.me/5548996534721" className="btn-primary">
+              <a
+                href="https://wa.me/5548996534721?text=Ol%C3%A1%2C%20Arthur!%20Vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20conversa."
+                className="btn-primary"
+              >
                 Arthur — Agendar Conversa
                 <ArrowIcon />
               </a>
-              <a href="https://wa.me/5548988779117" className="btn-primary">
+              <a
+                href="https://wa.me/5548988779117?text=Ol%C3%A1%2C%20Maria%20Helena!%20Vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20conversa."
+                className="btn-primary"
+              >
                 Maria Helena — Agendar Conversa
                 <ArrowIcon />
               </a>
