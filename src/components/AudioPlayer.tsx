@@ -115,20 +115,42 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
           display: flex;
           align-items: center;
           gap: 10px;
-          background: rgba(12,4,7,0.38);
-          backdrop-filter: blur(28px) saturate(1.9) brightness(1.06);
-          -webkit-backdrop-filter: blur(28px) saturate(1.9) brightness(1.06);
-          border: 1px solid rgba(201,169,110,0.14);
-          box-shadow: inset 0 1px 0 rgba(255,240,210,0.11), inset 0 -1px 0 rgba(139,0,0,0.09), 0 8px 32px rgba(0,0,0,0.44);
+          background: transparent;
+          border: 1px solid rgba(201,169,110,0.13);
+          box-shadow: inset 0 1px 0 rgba(255,240,210,0.13), inset 0 -1px 0 rgba(80,0,0,0.18), inset 1px 0 0 rgba(255,240,210,0.04), inset -1px 0 0 rgba(255,240,210,0.04), 0 12px 40px rgba(0,0,0,0.5);
           padding: 10px 18px 10px 14px;
           cursor: pointer;
-          transition: border-color 0.35s, background 0.35s, transform 0.35s, box-shadow 0.35s;
+          isolation: isolate;
+          overflow: hidden;
+          will-change: transform;
+          transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1);
           animation: fadeUp 0.8s ease 1.5s both;
         }
+        /* blur layer */
+        #audioBtn::before {
+          content: '';
+          position: absolute; inset: 0; z-index: -2;
+          background: rgba(8,2,5,0.52);
+          backdrop-filter: blur(32px) saturate(2.1) brightness(1.04);
+          -webkit-backdrop-filter: blur(32px) saturate(2.1) brightness(1.04);
+          transform: translate3d(0,0,0);
+          transition: background 0.4s ease;
+          pointer-events: none;
+        }
+        /* tint layer */
+        #audioBtn::after {
+          content: '';
+          position: absolute; inset: 0; z-index: -1;
+          background: rgba(139,0,0,0.06);
+          background-image: linear-gradient(135deg, rgba(255,240,210,0.09) 0%, rgba(201,169,110,0.07) 30%, rgba(139,0,0,0.04) 55%, transparent 75%);
+          pointer-events: none;
+          transition: background-color 0.4s ease;
+        }
+        #audioBtn:hover::before { background: rgba(18,5,9,0.72); }
+        #audioBtn:hover::after  { background-color: rgba(139,0,0,0.14); }
         #audioBtn:hover {
-          border-color: rgba(201,169,110,0.34);
-          background: rgba(20,6,10,0.54);
-          box-shadow: inset 0 1px 0 rgba(255,240,210,0.11), inset 0 -1px 0 rgba(139,0,0,0.09), 0 22px 64px rgba(0,0,0,0.56), 0 4px 18px rgba(139,0,0,0.20);
+          border-color: rgba(201,169,110,0.36);
+          box-shadow: inset 0 1px 0 rgba(255,240,210,0.13), inset 0 -1px 0 rgba(80,0,0,0.18), 0 28px 72px rgba(0,0,0,0.62), 0 4px 20px rgba(139,0,0,0.22);
           transform: translateY(-3px);
         }
         #audioBtn.paused {
