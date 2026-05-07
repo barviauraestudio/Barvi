@@ -11,7 +11,9 @@ export default function Nav({ menuOpen, onToggle }: Props) {
 
   useEffect(() => {
     function onScroll() {
-      navRef.current?.classList.toggle('scrolled', window.scrollY > 40)
+      if (navRef.current) {
+        navRef.current.classList.toggle('scrolled', window.scrollY > 40)
+      }
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -28,14 +30,12 @@ export default function Nav({ menuOpen, onToggle }: Props) {
           <li><a href="#parceiros">Parceiros</a></li>
           <li><a href="#cta">Contato</a></li>
           <li>
-            <a href="https://consultoria-tawny-zeta.vercel.app" target="_blank" rel="noopener noreferrer"
-               style={{ color: 'var(--gold)' }}>
+            <a href="https://consultoria-tawny-zeta.vercel.app" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gold)' }}>
               Consultoria ↗
             </a>
           </li>
           <li>
-            <a href="https://planos-roan.vercel.app" target="_blank" rel="noopener noreferrer"
-               style={{ color: 'var(--gold)' }}>
+            <a href="https://planos-roan.vercel.app" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gold)' }}>
               Nossos Planos ↗
             </a>
           </li>
