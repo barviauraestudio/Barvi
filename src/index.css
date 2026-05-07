@@ -142,57 +142,46 @@ nav {
   background: rgba(6,2,3,0.0);
   transition: padding 0.4s var(--ease-out), background 0.4s, border-color 0.4s;
   border-bottom: 1px solid transparent;
+  will-change: padding, background, border-color, box-shadow;
+  backface-visibility: hidden;
 }
+
 nav.scrolled {
   padding: 14px 0;
   border-bottom-color: var(--glass-border-h);
   box-shadow: var(--glass-shadow);
+  position: relative;
 }
+
+/* Glass Layer - mais robusto para produção */
 nav.scrolled::before {
   content: '';
-  position: absolute; inset: 0; z-index: -2;
+  position: absolute;
+  inset: 0;
+  z-index: -2;
   background: var(--glass-bg);
   backdrop-filter: blur(40px) saturate(2.2) brightness(1.05);
   -webkit-backdrop-filter: blur(40px) saturate(2.2) brightness(1.05);
-  transform: translate3d(0,0,0);
+  transform: translate3d(0, 0, 0);           /* força camada */
+  will-change: transform, backdrop-filter;
   pointer-events: none;
 }
+
 nav.scrolled::after {
   content: '';
-  position: absolute; inset: 0; z-index: -1;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: var(--glass-tint);
   pointer-events: none;
 }
-.nav-logo {
-  font-family: var(--FD);
-  font-style: italic;
-  font-size: 20px;
-  color: var(--gold);
-  letter-spacing: 0.02em;
-  text-decoration: none;
+
+/* Fallback mais forte para produção */
+@supports not (backdrop-filter: blur(1px)) {
+  nav.scrolled::before {
+    background: rgba(8, 2, 5, 0.94) !important;
+  }
 }
-.nav-links { display:flex; gap:36px; list-style:none; }
-.nav-links a {
-  font-size: 10px;
-  letter-spacing: 0.38em;
-  text-transform: uppercase;
-  color: var(--muted);
-  text-decoration: none;
-  position: relative;
-  transition: color 0.3s;
-}
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px; left: 0; right: 0;
-  height: 1px;
-  background: var(--gold);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.35s var(--ease-out);
-}
-.nav-links a:hover { color: var(--gold); }
-.nav-links a:hover::after { transform: scaleX(1); }
 
 /* ─── HAMBURGER ─────────────────────────────────── */
 .hamburger {
