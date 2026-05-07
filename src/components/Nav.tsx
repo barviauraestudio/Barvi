@@ -15,6 +15,8 @@ export default function Nav({ menuOpen, onToggle }: Props) {
         navRef.current.classList.toggle('scrolled', window.scrollY > 40)
       }
     }
+
+    onScroll() // ← linha adicionada aqui
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
