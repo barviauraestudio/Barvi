@@ -453,7 +453,7 @@ nav.scrolled::after {
 .pillars-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
+  gap: 16px;
   background: rgba(139,0,0,0.08);
   border: 1px solid rgba(139,0,0,0.12);
   max-width: 1100px;
