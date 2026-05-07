@@ -78,15 +78,45 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
 
   useEffect(() => {
     // Listen for the first interaction anywhere on the page
-    const onFirstInteraction = () => startAudio()
+    // but NOT on the audio button itself (it handles its own logic)
+    const onFirstInteraction = (e: Event) => {
+      const target = e.target as Element
+      if (target.closest('#audioBtn')) return
+      startAudio()
+    }
 
     const events = ['click', 'touchstart', 'keydown'] as const
-    events.forEach(ev => document.addEventListener(ev, onFirstInteraction, { once: true, passive: true }))
+    events.forEach(ev => document.addEventListener(ev, onFirstInteraction as EventListener, { once: true, passive: true }))
 
     return () => {
-      events.forEach(ev => document.removeEventListener(ev, onFirstInteraction))
+      events.forEach(ev => document.removeEventListener(ev, onFirstInteraction as EventListener))
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Separate touch handler for mobile to avoid passive listener conflicts
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    e.preventDefault()
+    const audio = audioRef.current
+    if (!audio) return
+
+    if (!startedRef.current) {
+      startedRef.current = true
+      audio.volume = 0
+      audio.play()
+        .then(() => { fadeIn(); setPlaying(true) })
+        .catch(() => {})
+      return
+    }
+
+    if (!audio.paused) {
+      fadeOut(() => audio.pause())
+      setPlaying(false)
+    } else {
+      audio.play().catch(() => {})
+      fadeIn()
+      setPlaying(true)
+    }
+  }
 
   return (
     <>
@@ -96,6 +126,7 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
         id="audioBtn"
         aria-label={playing ? 'Pausar música ambiente' : 'Reproduzir música ambiente'}
         onClick={handleButtonClick}
+        onTouchEnd={handleTouchEnd}
         className={playing ? 'playing' : 'paused'}
       >
         <span className="audio-icon">
