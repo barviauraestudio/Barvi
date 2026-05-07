@@ -135,7 +135,7 @@ footer .cw-inner {
 /* ─── NAV ───────────────────────────────────────── */
 nav {
   position: fixed;
-  isolation: isolate;
+  /* isolation: isolate;  ← remove essa linha */
   top: 0; left: 0; right: 0;
   z-index: 200;
   padding: 20px 0;
