@@ -136,7 +136,7 @@ footer .cw-inner {
 nav {
   position: fixed;
   top: 0; left: 0; right: 0;
-  z-index: 200;
+  z-index: 9000;
   padding: 20px 0;
   background: transparent;
   transition: padding 0.4s var(--ease-out), background 0.4s, border-color 0.4s, backdrop-filter 0.4s, box-shadow 0.4s;
@@ -190,7 +190,7 @@ nav.scrolled {
   border: none;
   cursor: pointer;
   padding: 6px;
-  z-index: 201;
+  z-index: 9001;
 }
 .hamburger span {
   display: block;
@@ -207,7 +207,7 @@ nav.scrolled {
 .mobile-menu {
   position: fixed;
   inset: 0;
-  z-index: 199;
+  z-index: 8999;
   background: rgba(7,0,2,0.82);
   backdrop-filter: blur(48px) saturate(2) brightness(0.9);
   -webkit-backdrop-filter: blur(48px) saturate(2) brightness(0.9);
@@ -411,7 +411,6 @@ nav.scrolled {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  will-change: transform;
   transition: var(--glass-trans), color 0.35s;
 }
 .manifesto-pill::before {
@@ -453,7 +452,6 @@ nav.scrolled {
   isolation: isolate;
   border-color: var(--glass-border);
   box-shadow: var(--glass-inset), var(--glass-shadow);
-  will-change: transform;
   transition: var(--glass-trans);
 }
 /* Blur layer on separate compositor layer */
@@ -561,7 +559,6 @@ nav.scrolled {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  will-change: transform;
   transition: var(--glass-trans);
 }
 .psych-state::before {
@@ -782,7 +779,6 @@ nav.scrolled {
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  will-change: transform;
   transition: var(--glass-trans);
 }
 .testimonial-card::before {
@@ -925,7 +921,6 @@ nav.scrolled {
   letter-spacing: 0.3em; text-transform: uppercase; text-decoration: none;
   border: 1px solid var(--glass-border); cursor: none;
   position: relative; overflow: hidden; isolation: isolate;
-  will-change: transform;
   transition: var(--glass-trans), color 0.3s;
 }
 /* blur layer */
@@ -986,7 +981,6 @@ nav.scrolled {
   isolation: isolate;
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-inset), var(--glass-shadow);
-  will-change: transform;
   transition: var(--glass-trans);
   overflow: hidden;
 }
