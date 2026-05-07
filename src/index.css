@@ -154,7 +154,7 @@ nav.scrolled::before {
   background: var(--glass-bg);
   backdrop-filter: blur(40px) saturate(2.2) brightness(1.05) !important;
   -webkit-backdrop-filter: blur(40px) saturate(2.2) brightness(1.05) !important;
-  transform: translate3d(0,0,0);
+  /* transform: translate3d(0,0,0);  ← remove essa linha */
   pointer-events: none;
 }
 nav.scrolled::after {
