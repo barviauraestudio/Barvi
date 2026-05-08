@@ -1137,3 +1137,45 @@ footer::after {
 @media(pointer:coarse){
   .btn-primary, .btn-secondary { cursor: pointer; }
 }
+
+/* ─── BLUR SIBLINGS ON HOVER ───────────────────── */
+
+/* Pilares */
+.pillars-grid:hover .pillar-card {
+  filter: blur(2px);
+  transform: scale(0.95);
+}
+.pillars-grid:hover .pillar-card:hover {
+  filter: blur(0px) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Psicologia — estados emocionais */
+.psych-states:hover .psych-state {
+  filter: blur(2px);
+  transform: scale(0.95);
+}
+.psych-states:hover .psych-state:hover {
+  filter: blur(0px) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Depoimentos */
+.testimonials-grid:hover .testimonial-card {
+  filter: blur(2px);
+  transform: scale(0.95);
+}
+.testimonials-grid:hover .testimonial-card:hover {
+  filter: blur(0px) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Manifesto pills */
+.manifesto-tagline:hover .manifesto-pill {
+  filter: blur(2px);
+  transform: scale(0.95);
+}
+.manifesto-tagline:hover .manifesto-pill:hover {
+  filter: blur(0px) !important;
+  transform: scale(1.05) !important;
+}
