@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+
 import Cursor from './components/Cursor'
 import ScrollProgress from './components/ScrollProgress'
 import Nav from './components/Nav'
@@ -13,6 +14,7 @@ import Testimonials from './components/Testimonials'
 import CTA from './components/CTA'
 import Footer from './components/Footer'
 import AudioPlayer from './components/AudioPlayer'
+import { useBlurSiblings } from './components/useBlurSiblings'
 
 function BackToTop() {
   const [visible, setVisible] = useState(false)
@@ -42,6 +44,7 @@ function BackToTop() {
         </svg>
         <span>topo</span>
       </button>
+
       <style>{`
         #back-to-top {
           position: fixed;
@@ -92,7 +95,13 @@ function BackToTop() {
 }
 
 function App() {
-  const [menuOpen, setMenuOpen] = useState(false)
+  // Hooks devem ficar no topo
+  useBlurSiblings(".pillars-grid", ".pillar-card");
+  useBlurSiblings(".psych-states", ".psych-state");
+  useBlurSiblings(".testimonials-grid", ".testimonial-card");
+  useBlurSiblings(".manifesto-tagline", ".manifesto-pill");
+
+  const [menuOpen, setMenuOpen] = useState(false);
 
   function toggleMenu() {
     setMenuOpen(prev => {
