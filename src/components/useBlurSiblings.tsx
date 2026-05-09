@@ -10,13 +10,12 @@ export function useBlurSiblings(gridSelector: string, cardSelector: string) {
 
       function focusCard(target: HTMLElement) {
         cards.forEach(card => {
+          card.style.transition = 'filter 0.4s ease, opacity 0.4s ease, transform 0.4s ease'
           if (card === target) {
-            card.style.transition = 'filter 0.4s ease, opacity 0.4s ease, transform 0.4s ease'
             card.style.filter = 'blur(0px)'
             card.style.opacity = '1'
             card.style.transform = 'scale(1.03)'
           } else {
-            card.style.transition = 'filter 0.4s ease, opacity 0.4s ease, transform 0.4s ease'
             card.style.filter = 'blur(2px)'
             card.style.opacity = '0.5'
             card.style.transform = 'scale(0.95)'
@@ -34,44 +33,29 @@ export function useBlurSiblings(gridSelector: string, cardSelector: string) {
       }
 
       if (isTouch) {
-        // Guarda a ratio de interseção de cada card em tempo real
-        const ratios = new Map<HTMLElement, number>()
-
-        const observer = new IntersectionObserver(
-          (entries) => {
-            // Atualiza o mapa com a ratio atual de cada card que mudou
-            entries.forEach(entry => {
-              ratios.set(entry.target as HTMLElement, entry.intersectionRatio)
-            })
-
-            // Encontra o card mais visível no momento
-            let bestCard: HTMLElement | null = null
-            let bestRatio = 0
-            ratios.forEach((ratio, card) => {
-              if (ratio > bestRatio) {
-                bestRatio = ratio
-                bestCard = card
-              }
-            })
-
-            if (bestCard && bestRatio >= 0.4) {
-              focusCard(bestCard)
-            } else {
-              resetAll()
-            }
-          },
-          {
-            threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
-            rootMargin: '0px 0px -5% 0px'
-          }
-        )
+        // Mobile: toque no card destaca ele, toque fora reseta
+        const handlers = new Map<HTMLElement, () => void>()
 
         cards.forEach(card => {
-          ratios.set(card, 0)
-          observer.observe(card)
+          const handler = () => focusCard(card)
+          handlers.set(card, handler)
+          card.addEventListener('touchstart', handler, { passive: true })
         })
 
-        return () => observer.disconnect()
+        // Toque fora de qualquer card reseta tudo
+        const onOutsideTouch = (e: TouchEvent) => {
+          const touched = e.target as Element
+          if (!touched.closest(cardSelector)) resetAll()
+        }
+        document.addEventListener('touchstart', onOutsideTouch, { passive: true })
+
+        return () => {
+          cards.forEach(card => {
+            const handler = handlers.get(card)
+            if (handler) card.removeEventListener('touchstart', handler)
+          })
+          document.removeEventListener('touchstart', onOutsideTouch)
+        }
 
       } else {
         // Desktop: hover
