@@ -77,10 +77,10 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
   }
 
   useEffect(() => {
-    // Listen for the first interaction anywhere on the page
+    // Inicia o áudio na primeira interação (exceto touchstart — tratado no botão)
     const onFirstInteraction = () => startAudio()
 
-    const events = ['click', 'touchstart', 'keydown'] as const
+    const events = ['click', 'keydown'] as const
     events.forEach(ev => document.addEventListener(ev, onFirstInteraction, { once: true, passive: true }))
 
     return () => {
@@ -96,6 +96,7 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
         id="audioBtn"
         aria-label={playing ? 'Pausar música ambiente' : 'Reproduzir música ambiente'}
         onClick={handleButtonClick}
+        onTouchEnd={(e) => { e.preventDefault(); handleButtonClick(e as any) }}
         className={playing ? 'playing' : 'paused'}
       >
         <span className="audio-icon">
