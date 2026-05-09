@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 export function useBlurSiblings(gridSelector: string, cardSelector: string) {
   useEffect(() => {
-    if (window.matchMedia('(pointer: fine)').matches) return // só mobile/touch
+    if (window.matchMedia('(pointer: coarse)').matches) return // sai se for mobile/touch
 
     const grids = document.querySelectorAll<HTMLElement>(gridSelector)
 
@@ -13,7 +13,6 @@ export function useBlurSiblings(gridSelector: string, cardSelector: string) {
         (entries) => {
           entries.forEach(entry => {
             if (entry.intersectionRatio > 0.6) {
-              // esse card está no centro — destaca ele, blur nos outros
               cards.forEach(card => {
                 if (card === entry.target) {
                   card.style.filter = 'blur(0px)'
@@ -30,8 +29,6 @@ export function useBlurSiblings(gridSelector: string, cardSelector: string) {
       )
 
       cards.forEach(card => observer.observe(card))
-
-      return () => observer.disconnect()
     })
   }, [])
 }
