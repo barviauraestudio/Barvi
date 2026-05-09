@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const BREVO_API_KEY = 'SUA_API_KEY_AQUI' // ← substitui pela nova key
+const BREVO_API_KEY = import.meta.env.VITE_BREVO_API_KEY
 const LIST_ID = 2 // ← ajusta para o ID da sua lista no Brevo
 
 export default function EmailPopup() {
