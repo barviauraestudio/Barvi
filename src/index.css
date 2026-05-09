@@ -1141,16 +1141,16 @@ footer::after {
 /* ─── BLUR SIBLINGS ON HOVER ───────────────────── */
 
 /* Pilares */
-.pillars-grid:has(.pillar-card:hover) .pillar-card {
+.pillars-grid:has(.pillar-card:hover) .reveal {
   filter: blur(2px);
   transform: scale(0.95);
 }
-.pillars-grid .pillar-card:hover {
+.pillars-grid .reveal:has(.pillar-card:hover) {
   filter: blur(0px) !important;
   transform: scale(1.05) !important;
 }
 
-/* Psicologia — estados emocionais */
+/* Psicologia */
 .psych-states:has(.psych-state:hover) .psych-state {
   filter: blur(2px);
   transform: scale(0.95);
@@ -1161,11 +1161,11 @@ footer::after {
 }
 
 /* Depoimentos */
-.testimonials-grid:has(.testimonial-card:hover) .testimonial-card {
+.testimonials-grid:has(.testimonial-card:hover) .reveal {
   filter: blur(2px);
   transform: scale(0.95);
 }
-.testimonials-grid .testimonial-card:hover {
+.testimonials-grid .reveal:has(.testimonial-card:hover) {
   filter: blur(0px) !important;
   transform: scale(1.05) !important;
 }
