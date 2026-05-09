@@ -42,7 +42,6 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
     }, 40)
   }
 
-  // Called once on the very first user interaction anywhere on the page
   const startAudio = () => {
     if (startedRef.current) return
     startedRef.current = true
@@ -51,13 +50,12 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
     audio.volume = 0
     audio.play()
       .then(() => { fadeIn(); setPlaying(true) })
-      .catch(() => { /* autoplay still blocked — user must press button */ })
+      .catch(() => {})
   }
 
-  // Button click: if audio hasn't started yet, start it;
-  // otherwise toggle play/pause
-  const handleButtonClick = (e: React.MouseEvent) => {
+  const handleButtonClick = (e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation()
+    e.preventDefault()
     const audio = audioRef.current
     if (!audio) return
 
@@ -77,10 +75,13 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
   }
 
   useEffect(() => {
-    // Inicia o áudio na primeira interação (exceto touchstart — tratado no botão)
-    const onFirstInteraction = () => startAudio()
+    const onFirstInteraction = (e: Event) => {
+      const target = e.target as Element
+      if (target.closest('#audioBtn')) return // botão cuida de si mesmo
+      startAudio()
+    }
 
-    const events = ['click', 'keydown'] as const
+    const events = ['click', 'touchstart', 'keydown'] as const
     events.forEach(ev => document.addEventListener(ev, onFirstInteraction, { once: true, passive: true }))
 
     return () => {
@@ -96,7 +97,7 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
         id="audioBtn"
         aria-label={playing ? 'Pausar música ambiente' : 'Reproduzir música ambiente'}
         onClick={handleButtonClick}
-        onTouchEnd={(e) => { e.preventDefault(); handleButtonClick(e as any) }}
+        onTouchEnd={handleButtonClick}
         className={playing ? 'playing' : 'paused'}
       >
         <span className="audio-icon">
@@ -127,7 +128,6 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
           transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1);
           animation: fadeUp 0.8s ease 1.5s both;
         }
-        /* blur layer */
         #audioBtn::before {
           content: '';
           position: absolute; inset: 0; z-index: -2;
@@ -138,7 +138,6 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
           transition: background 0.4s ease;
           pointer-events: none;
         }
-        /* tint layer */
         #audioBtn::after {
           content: '';
           position: absolute; inset: 0; z-index: -1;
