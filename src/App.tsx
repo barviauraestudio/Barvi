@@ -16,6 +16,7 @@ import Footer from './components/Footer'
 import AudioPlayer from './components/AudioPlayer'
 import { useBlurSiblings } from './components/useBlurSiblings'
 import EmailPopup from './components/EmailPopup'
+import { Analytics } from '@vercel/analytics/react'
 
 function BackToTop() {
   const [visible, setVisible] = useState(false)
@@ -134,6 +135,7 @@ function App() {
       <AudioPlayer src="/SITE-AURA-AUDIO.MP3" />
       <BackToTop />
       <EmailPopup />
+      <Analytics />
     </>
   )
 }
