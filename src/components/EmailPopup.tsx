@@ -25,12 +25,11 @@ export default function EmailPopup() {
     setStatus('loading')
     setErrorMsg('')
     try {
-      const res = await fetch('https://api.brevo.com/v3/contacts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'api-key': BREVO_API_KEY,
-        },
+const res = await fetch('/api/subscribe', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email }),
+})
         body: JSON.stringify({ email, listIds: [LIST_ID], updateEnabled: true }),
       })
       if (res.ok || res.status === 204) {
