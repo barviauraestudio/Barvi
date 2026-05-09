@@ -93,13 +93,16 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
     <>
       <audio ref={audioRef} loop preload="auto" src={src} />
 
-      <button
-        id="audioBtn"
-        aria-label={playing ? 'Pausar música ambiente' : 'Reproduzir música ambiente'}
-        onClick={handleButtonClick}
-        onTouchEnd={handleButtonClick}
-        className={playing ? 'playing' : 'paused'}
-      >
+    <button
+  id="audioBtn"
+  aria-label={playing ? 'Pausar música ambiente' : 'Reproduzir música ambiente'}
+  onClick={(e) => {
+    if ('ontouchstart' in window) return // mobile usa onTouchEnd
+    handleButtonClick(e)
+  }}
+  onTouchEnd={handleButtonClick}
+  className={playing ? 'playing' : 'paused'}
+>
         <span className="audio-icon">
           <span className="bar b1" />
           <span className="bar b2" />
