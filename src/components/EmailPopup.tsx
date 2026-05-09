@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react'
 
-const BREVO_API_KEY = import.meta.env.VITE_BREVO_API_KEY
-const LIST_ID = 2 // ← ajusta para o ID da sua lista no Brevo
-
 export default function EmailPopup() {
   const [visible, setVisible] = useState(false)
   const [email, setEmail] = useState('')
@@ -11,7 +8,7 @@ export default function EmailPopup() {
 
   useEffect(() => {
     const subscribed = localStorage.getItem('barvi-subscribed')
-    if (subscribed) return // já cadastrou, nunca mais aparece
+    if (subscribed) return
 
     const timer = setTimeout(() => setVisible(true), 4000)
     return () => clearTimeout(timer)
@@ -25,13 +22,12 @@ export default function EmailPopup() {
     setStatus('loading')
     setErrorMsg('')
     try {
-const res = await fetch('/api/subscribe', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ email }),
-})
-        body: JSON.stringify({ email, listIds: [LIST_ID], updateEnabled: true }),
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
       })
+
       if (res.ok || res.status === 204) {
         localStorage.setItem('barvi-subscribed', '1')
         setStatus('success')
