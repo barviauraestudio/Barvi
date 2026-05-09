@@ -2,33 +2,38 @@ import { useEffect } from 'react'
 
 export function useBlurSiblings(gridSelector: string, cardSelector: string) {
   useEffect(() => {
-    if (window.matchMedia('(pointer: coarse)').matches) return // sai se for mobile/touch
+    const isTouch = window.matchMedia('(pointer: coarse)').matches
+    if (!isTouch) return // desktop usa CSS :has(), só roda no mobile
 
     const grids = document.querySelectorAll<HTMLElement>(gridSelector)
 
     grids.forEach(grid => {
       const cards = Array.from(grid.querySelectorAll<HTMLElement>(cardSelector))
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach(entry => {
-            if (entry.intersectionRatio > 0.6) {
-              cards.forEach(card => {
-                if (card === entry.target) {
-                  card.style.filter = 'blur(0px)'
-                  card.style.transform = 'scale(1.03)'
-                } else {
-                  card.style.filter = 'blur(2px)'
-                  card.style.transform = 'scale(0.95)'
-                }
-              })
+      cards.forEach(card => {
+        card.addEventListener('touchstart', () => {
+          cards.forEach(c => {
+            if (c === card) {
+              c.style.filter = 'blur(0px)'
+              c.style.transform = 'scale(1.03)'
+            } else {
+              c.style.filter = 'blur(2px)'
+              c.style.transform = 'scale(0.95)'
             }
           })
-        },
-        { threshold: 0.6, rootMargin: '0px 0px -10% 0px' }
-      )
+        }, { passive: true })
+      })
 
-      cards.forEach(card => observer.observe(card))
+      // toca fora = reseta tudo
+      document.addEventListener('touchstart', (e) => {
+        const touched = e.target as Element
+        if (!touched.closest(cardSelector)) {
+          cards.forEach(c => {
+            c.style.filter = ''
+            c.style.transform = ''
+          })
+        }
+      }, { passive: true })
     })
   }, [])
 }
