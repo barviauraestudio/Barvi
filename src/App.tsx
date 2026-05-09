@@ -15,6 +15,7 @@ import CTA from './components/CTA'
 import Footer from './components/Footer'
 import AudioPlayer from './components/AudioPlayer'
 import { useBlurSiblings } from './components/useBlurSiblings'
+import EmailPopup from './components/EmailPopup'
 
 function BackToTop() {
   const [visible, setVisible] = useState(false)
@@ -132,6 +133,7 @@ function App() {
       <Footer />
       <AudioPlayer src="/SITE-AURA-AUDIO.MP3" />
       <BackToTop />
+      <EmailPopup />
     </>
   )
 }
