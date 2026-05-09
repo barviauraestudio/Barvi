@@ -10,6 +10,7 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
   const startedRef = useRef(false)
   const fadeInRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const fadeOutRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const blockNextClick = useRef(false)
 
   const clearFade = () => {
     if (fadeInRef.current) { clearInterval(fadeInRef.current); fadeInRef.current = null }
@@ -53,9 +54,7 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
       .catch(() => {})
   }
 
-  const handleButtonClick = (e: React.MouseEvent | React.TouchEvent) => {
-    e.stopPropagation()
-    e.preventDefault()
+  const toggle = () => {
     const audio = audioRef.current
     if (!audio) return
 
@@ -77,15 +76,16 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
   useEffect(() => {
     const onFirstInteraction = (e: Event) => {
       const target = e.target as Element
-      if (target.closest('#audioBtn')) return // botão cuida de si mesmo
+      if (target.closest('#audioBtn')) return
       startAudio()
     }
 
-    const events = ['click', 'touchstart', 'keydown'] as const
-    events.forEach(ev => document.addEventListener(ev, onFirstInteraction, { once: true, passive: true }))
+    document.addEventListener('touchstart', onFirstInteraction, { once: true, passive: true })
+    document.addEventListener('click', onFirstInteraction, { once: true, passive: true })
 
     return () => {
-      events.forEach(ev => document.removeEventListener(ev, onFirstInteraction))
+      document.removeEventListener('touchstart', onFirstInteraction)
+      document.removeEventListener('click', onFirstInteraction)
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -93,16 +93,25 @@ export default function AudioPlayer({ src = '/SITE-AURA-AUDIO.MP3' }: AudioPlaye
     <>
       <audio ref={audioRef} loop preload="auto" src={src} />
 
-    <button
-  id="audioBtn"
-  aria-label={playing ? 'Pausar música ambiente' : 'Reproduzir música ambiente'}
-  onClick={(e) => {
-    if ('ontouchstart' in window) return // mobile usa onTouchEnd
-    handleButtonClick(e)
-  }}
-  onTouchEnd={handleButtonClick}
-  className={playing ? 'playing' : 'paused'}
->
+      <button
+        id="audioBtn"
+        aria-label={playing ? 'Pausar música ambiente' : 'Reproduzir música ambiente'}
+        onTouchEnd={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          blockNextClick.current = true
+          toggle()
+        }}
+        onClick={(e) => {
+          if (blockNextClick.current) {
+            blockNextClick.current = false
+            return
+          }
+          e.stopPropagation()
+          toggle()
+        }}
+        className={playing ? 'playing' : 'paused'}
+      >
         <span className="audio-icon">
           <span className="bar b1" />
           <span className="bar b2" />
