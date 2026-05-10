@@ -26,11 +26,11 @@ export default function Partners() {
       id="parceiros" 
       className="section"
       style={{ 
-        padding: '100px 0 120px',
+        padding: '80px 0 100px',
       }}
     >
       <CenterWrapper>
-        <Reveal className="section-header" style={{ marginBottom: 48 }}>
+        <Reveal className="section-header" style={{ marginBottom: 40 }}>
           <p className="section-eyebrow">PRODUÇÕES E PARCEIROS</p>
           <h2 className="section-title" style={{ 
             fontSize: 'clamp(32px, 5.5vw, 52px)', 
@@ -41,11 +41,11 @@ export default function Partners() {
           </h2>
         </Reveal>
 
-        <Reveal style={{ marginBottom: 60 }}>
+        <Reveal style={{ marginBottom: 50 }}>
           <p className="partners-intro" style={{
-            fontSize: 'clamp(15px, 1.8vw, 17.5px)',
+            fontSize: 'clamp(15px, 1.8vw, 17px)',
             maxWidth: '680px',
-            lineHeight: 1.75,
+            lineHeight: 1.7,
             color: 'var(--muted)',
             textAlign: 'center',
             margin: '0 auto'
@@ -55,7 +55,6 @@ export default function Partners() {
           </p>
         </Reveal>
 
-        {/* Grid de Parceiros */}
         <Reveal>
           <div className="partners-grid">
             {ALL_PARTNERS.map((name, index) => (
@@ -67,52 +66,56 @@ export default function Partners() {
         </Reveal>
       </CenterWrapper>
 
-      {/* Estilos globais para este componente */}
       <style dangerouslySetInnerHTML={{
         __html: `
           .partners-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 18px 40px;
+            gap: 12px 40px;
             max-width: 1100px;
             margin: 0 auto;
           }
 
           .partner-item {
-            padding: 10px 0;
+            padding: 6px 0;
             border-bottom: 1px solid rgba(201, 169, 110, 0.08);
-            transition: all 0.3s ease;
-          }
-
-          .partner-item:hover {
-            transform: translateX(8px);
-            border-bottom-color: rgba(201, 169, 110, 0.25);
           }
 
           .partner-name {
             font-family: var(--FD);
-            font-size: clamp(15px, 1.65vw, 17px);
+            font-size: clamp(15px, 1.6vw, 16.5px);
             font-weight: 300;
-            letter-spacing: 0.02em;
+            letter-spacing: 0.015em;
             color: var(--white);
             margin: 0;
-            transition: color 0.3s ease;
           }
 
-          .partner-item:hover .partner-name {
-            color: var(--gold);
+          /* Hover apenas em telas maiores */
+          @media (hover: hover) {
+            .partner-item:hover {
+              transform: translateX(6px);
+              border-bottom-color: rgba(201, 169, 110, 0.3);
+            }
+            .partner-item:hover .partner-name {
+              color: var(--gold);
+            }
           }
 
-          /* Mobile */
+          /* Mobile - Muito mais compacto */
           @media (max-width: 640px) {
             .partners-grid {
               grid-template-columns: 1fr;
-              gap: 14px 0;
+              gap: 8px 0;
             }
             
             .partner-item {
-              padding: 8px 0;
+              padding: 4px 0;
               border-bottom: 1px solid rgba(201, 169, 110, 0.06);
+            }
+
+            .section {
+              padding-top: 70px !important;
+              padding-bottom: 90px !important;
             }
           }
         `
