@@ -45,6 +45,8 @@ export default function Minimalism() {
       const dpr = window.devicePixelRatio || 1
       canvas.width = section.offsetWidth * dpr
       canvas.height = section.offsetHeight * dpr
+      const margin = W * 0.12 // 12% de margem em cada lado
+      
       const ctx = canvas.getContext('2d')
       if (ctx) ctx.scale(dpr, dpr)
     }
@@ -138,7 +140,7 @@ export default function Minimalism() {
 
       ctx.beginPath()
       for (let p = 0; p <= POINTS; p++) {
-        const x = (p / POINTS) * W
+        const x = margin + (p / POINTS) * (W - margin * 2)
         const xNorm = p / POINTS
 
         const wave =
