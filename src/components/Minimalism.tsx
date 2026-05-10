@@ -16,7 +16,7 @@ export default function Minimalism() {
   const startTimeRef = useRef<number>(0)
 
   const linesData = useRef(
-    Array.from({ length: LINES_COUNT }, (_, i) => ({
+    Array.from({ length: LINES_COUNT }, () => ({
       yStart: 5 + Math.random() * 90,
       amp1: 30 + Math.random() * 80,
       amp2: 20 + Math.random() * 60,
@@ -45,7 +45,7 @@ export default function Minimalism() {
       canvas.width = section.offsetWidth * dpr
       canvas.height = section.offsetHeight * dpr
       const ctx = canvas.getContext('2d')
-      if (ctx) ctx.scale(dpr, dpr)
+      ctx?.scale(dpr, dpr)
     }
 
     resizeCanvas()
@@ -87,7 +87,6 @@ export default function Minimalism() {
       }
     }, 400 + LETTERS.length * 80 + 200)
 
-    // Linha decorativa aparece quando as linhas do canvas convergem
     setTimeout(() => {
       if (lineRef.current) {
         lineRef.current.style.transition = 'width 1.4s cubic-bezier(0.22,1,0.36,1), opacity 0.8s ease'
@@ -173,9 +172,11 @@ export default function Minimalism() {
     }
 
     function draw(now: number) {
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
       const W = canvas.width / dpr
       const H = canvas.height / dpr
-      const ctx = canvas.getContext('2d')!
+
       ctx.clearRect(0, 0, W, H)
 
       const elapsed = now - startTimeRef.current
