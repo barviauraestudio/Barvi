@@ -63,6 +63,7 @@ export default function Minimalism() {
     )
 
     observer.observe(section)
+
     return () => {
       observer.disconnect()
       cancelAnimationFrame(rafRef.current)
@@ -106,14 +107,14 @@ export default function Minimalism() {
   function startLinesAnimation() {
     const canvas = canvasRef.current
     if (!canvas) return
-    const dpr = window.devicePixelRatio || 1
 
+    const dpr = window.devicePixelRatio || 1
     const CHAOS_DURATION = 2500
     const CONVERGE_DURATION = 2000
 
     startTimeRef.current = performance.now()
 
-    function easeInOut(t: number) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t }
+    function easeInOut(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t }
     function lerp(a: number, b: number, t: number) { return a + (b - a) * t }
 
     function drawWavyLine(
@@ -139,7 +140,6 @@ export default function Minimalism() {
       for (let p = 0; p <= POINTS; p++) {
         const x = margin + (p / POINTS) * drawW
         const xNorm = p / POINTS
-
         const wave =
           amp1 * ampFactor * Math.sin(xNorm * freq1 * Math.PI * 2 + phase1 + time * speed) +
           amp2 * ampFactor * Math.sin(xNorm * freq2 * Math.PI * 2 + phase2 + time * speed * 1.3) +
@@ -172,10 +172,14 @@ export default function Minimalism() {
     }
 
     function draw(now: number) {
-      const ctx = canvas.getContext('2d')
+      const canvasEl = canvasRef.current
+      if (!canvasEl) return
+
+      const ctx = canvasEl.getContext('2d')
       if (!ctx) return
-      const W = canvas.width / dpr
-      const H = canvas.height / dpr
+
+      const W = canvasEl.width / dpr
+      const H = canvasEl.height / dpr
 
       ctx.clearRect(0, 0, W, H)
 
@@ -196,10 +200,8 @@ export default function Minimalism() {
             1.0
           )
         })
-
       } else if (elapsed < CHAOS_DURATION + CONVERGE_DURATION) {
         const t = easeInOut((elapsed - CHAOS_DURATION) / CONVERGE_DURATION)
-
         linesData.current.forEach(line => {
           const currentY = lerp(line.yStart, targetY, t)
           const ampFactor = lerp(1.0, 0.0, t)
@@ -220,7 +222,8 @@ export default function Minimalism() {
         })
       }
 
-      if (elapsed < CHAOS_DURATION + CONVERGE_DURATION) {
+      // Continua animando apenas durante caos + convergência
+      if (elapsed < CHAOS_DURATION + CONVERGE_DURATION + 100) {
         rafRef.current = requestAnimationFrame(draw)
       }
     }
@@ -250,7 +253,7 @@ export default function Minimalism() {
 
       <CenterWrapper>
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 720, margin: '0 auto' }}>
-
+          {/* Título */}
           <div style={{
             display: 'flex', flexWrap: 'wrap',
             justifyContent: 'center',
@@ -274,6 +277,7 @@ export default function Minimalism() {
             ))}
           </div>
 
+          {/* Frase */}
           <p ref={phraseRef} style={{
             fontFamily: 'var(--FD)', fontStyle: 'italic',
             fontSize: 'clamp(18px, 2.2vw, 28px)', color: 'var(--gold)',
@@ -284,6 +288,7 @@ export default function Minimalism() {
             Trabalhamos com minimalismo.
           </p>
 
+          {/* Linha decorativa */}
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
             <div
               ref={lineRef}
@@ -296,6 +301,7 @@ export default function Minimalism() {
             />
           </div>
 
+          {/* Texto */}
           <p ref={textRef} style={{
             fontSize: 'clamp(14px, 1.5vw, 17px)', color: 'var(--muted)',
             lineHeight: 1.88, maxWidth: 460, margin: '0 auto',
@@ -307,7 +313,6 @@ export default function Minimalism() {
             O que sobra é{' '}
             <em style={{ color: 'var(--goldlt)', fontStyle: 'italic' }}>intenção pura.</em>
           </p>
-
         </div>
       </CenterWrapper>
     </section>
