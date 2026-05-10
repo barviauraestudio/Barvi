@@ -17,7 +17,7 @@ export default function Minimalism() {
 
   // Cada linha tem múltiplos pontos de controle para formar curvas moles
   const linesData = useRef(
-    Array.from({ length: LINES_COUNT }, (_, i) => ({
+    Array.from({ length: LINES_COUNT }, () => ({  // ← removido 'i' não utilizado
       yStart: 5 + Math.random() * 90,
       amp1: 30 + Math.random() * 80,
       amp2: 20 + Math.random() * 60,
@@ -95,7 +95,7 @@ export default function Minimalism() {
       }
     }, 400 + LETTERS.length * 80 + 500)
 
-    // Linha decorativa aparece no final da convergência (caos 2500 + converge 2000)
+    // Linha decorativa aparece no final da convergência
     setTimeout(() => {
       if (lineRef.current) {
         lineRef.current.style.transition = 'width 1.4s cubic-bezier(0.22,1,0.36,1), opacity 0.8s ease'
@@ -173,9 +173,14 @@ export default function Minimalism() {
     }
 
     function draw(now: number) {
-      const W = canvas.width / dpr
-      const H = canvas.height / dpr
-      const ctx = canvas.getContext('2d')!
+      const canvasEl = canvasRef.current
+      if (!canvasEl) return
+
+      const W = canvasEl.width / dpr
+      const H = canvasEl.height / dpr
+      const ctx = canvasEl.getContext('2d')
+      if (!ctx) return
+
       ctx.clearRect(0, 0, W, H)
 
       const elapsed = now - startTimeRef.current
@@ -183,7 +188,6 @@ export default function Minimalism() {
       const targetY = 62
 
       if (elapsed < CHAOS_DURATION) {
-        // Fase caótica
         linesData.current.forEach(line => {
           drawWavyLine(
             ctx, W, H,
@@ -196,9 +200,7 @@ export default function Minimalism() {
             1.0
           )
         })
-
       } else if (elapsed < CHAOS_DURATION + CONVERGE_DURATION) {
-        // Fase de convergência
         const t = easeInOut((elapsed - CHAOS_DURATION) / CONVERGE_DURATION)
 
         linesData.current.forEach((line, i) => {
@@ -236,14 +238,10 @@ export default function Minimalism() {
             )
           }
         })
-
       } else {
-        // Fase final (HOLD) — removemos a linha dourada do canvas
-        // A lineRef agora é a linha final
         const holdT = Math.min(1, (elapsed - CHAOS_DURATION - CONVERGE_DURATION) / HOLD_DURATION)
         const pulseTime = (elapsed - CHAOS_DURATION - CONVERGE_DURATION) / 1000
 
-        // Apenas linhas fantasma sutis (opcional, pode remover se preferir)
         linesData.current.slice(0, 6).forEach((line) => {
           drawWavyLine(
             ctx, W, H,
@@ -277,7 +275,6 @@ export default function Minimalism() {
         textAlign: 'center',
       }}
     >
-      {/* Canvas no background */}
       <canvas
         ref={canvasRef}
         style={{
@@ -289,7 +286,6 @@ export default function Minimalism() {
 
       <CenterWrapper>
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 720, margin: '0 auto' }}>
-
           {/* MINIMALISMO */}
           <div style={{
             display: 'flex', flexWrap: 'wrap',
@@ -325,7 +321,7 @@ export default function Minimalism() {
             Trabalhamos com minimalismo.
           </p>
 
-          {/* Linha decorativa — agora é a linha final */}
+          {/* Linha decorativa */}
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
             <div
               ref={lineRef}
@@ -348,7 +344,6 @@ export default function Minimalism() {
             O que sobra é{' '}
             <em style={{ color: 'var(--goldlt)', fontStyle: 'italic' }}>intenção pura.</em>
           </p>
-
         </div>
       </CenterWrapper>
     </section>
