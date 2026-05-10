@@ -15,9 +15,8 @@ export default function Minimalism() {
   const rafRef = useRef<number>(0)
   const startTimeRef = useRef<number>(0)
 
-  // Cada linha tem múltiplos pontos de controle para formar curvas moles
   const linesData = useRef(
-    Array.from({ length: LINES_COUNT }, () => ({  // ← removido 'i' não utilizado
+    Array.from({ length: LINES_COUNT }, (_, i) => ({
       yStart: 5 + Math.random() * 90,
       amp1: 30 + Math.random() * 80,
       amp2: 20 + Math.random() * 60,
@@ -45,8 +44,6 @@ export default function Minimalism() {
       const dpr = window.devicePixelRatio || 1
       canvas.width = section.offsetWidth * dpr
       canvas.height = section.offsetHeight * dpr
-      const margin = W * 0.12 // 12% de margem em cada lado
-      
       const ctx = canvas.getContext('2d')
       if (ctx) ctx.scale(dpr, dpr)
     }
@@ -90,14 +87,7 @@ export default function Minimalism() {
       }
     }, 400 + LETTERS.length * 80 + 200)
 
-    setTimeout(() => {
-      if (textRef.current) {
-        textRef.current.style.opacity = '1'
-        textRef.current.style.transform = 'translateY(0)'
-      }
-    }, 400 + LETTERS.length * 80 + 500)
-
-    // Linha decorativa aparece no final da convergência
+    // Linha decorativa aparece quando as linhas do canvas convergem
     setTimeout(() => {
       if (lineRef.current) {
         lineRef.current.style.transition = 'width 1.4s cubic-bezier(0.22,1,0.36,1), opacity 0.8s ease'
@@ -105,6 +95,13 @@ export default function Minimalism() {
         lineRef.current.style.opacity = '1'
       }
     }, 4500)
+
+    setTimeout(() => {
+      if (textRef.current) {
+        textRef.current.style.opacity = '1'
+        textRef.current.style.transform = 'translateY(0)'
+      }
+    }, 5000)
   }
 
   function startLinesAnimation() {
@@ -114,11 +111,10 @@ export default function Minimalism() {
 
     const CHAOS_DURATION = 2500
     const CONVERGE_DURATION = 2000
-    const HOLD_DURATION = 800
 
     startTimeRef.current = performance.now()
 
-    function easeInOut(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t }
+    function easeInOut(t: number) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t }
     function lerp(a: number, b: number, t: number) { return a + (b - a) * t }
 
     function drawWavyLine(
@@ -135,12 +131,14 @@ export default function Minimalism() {
       thickness: number,
       ampFactor: number
     ) {
+      const margin = W * 0.12
+      const drawW = W - margin * 2
       const yCenter = H * yBase / 100
       const POINTS = 80
 
       ctx.beginPath()
       for (let p = 0; p <= POINTS; p++) {
-        const x = margin + (p / POINTS) * (W - margin * 2)
+        const x = margin + (p / POINTS) * drawW
         const xNorm = p / POINTS
 
         const wave =
@@ -157,7 +155,7 @@ export default function Minimalism() {
       if (color === 'gold') {
         ctx.strokeStyle = `rgba(201,169,110,${opacity.toFixed(2)})`
         ctx.shadowColor = 'rgba(201,169,110,0.5)'
-        ctx.shadowBlur = 8 * ampFactor + 4
+        ctx.shadowBlur = 8 * ampFactor + 2
       } else if (color === 'crimson') {
         ctx.strokeStyle = `rgba(139,0,0,${opacity.toFixed(2)})`
         ctx.shadowColor = 'rgba(139,0,0,0.4)'
@@ -175,19 +173,14 @@ export default function Minimalism() {
     }
 
     function draw(now: number) {
-      const canvasEl = canvasRef.current
-      if (!canvasEl) return
-
-      const W = canvasEl.width / dpr
-      const H = canvasEl.height / dpr
-      const ctx = canvasEl.getContext('2d')
-      if (!ctx) return
-
+      const W = canvas.width / dpr
+      const H = canvas.height / dpr
+      const ctx = canvas.getContext('2d')!
       ctx.clearRect(0, 0, W, H)
 
       const elapsed = now - startTimeRef.current
       const time = elapsed / 1000
-      const targetY = 62
+      const targetY = 58
 
       if (elapsed < CHAOS_DURATION) {
         linesData.current.forEach(line => {
@@ -202,15 +195,14 @@ export default function Minimalism() {
             1.0
           )
         })
+
       } else if (elapsed < CHAOS_DURATION + CONVERGE_DURATION) {
         const t = easeInOut((elapsed - CHAOS_DURATION) / CONVERGE_DURATION)
 
-        linesData.current.forEach((line, i) => {
+        linesData.current.forEach(line => {
           const currentY = lerp(line.yStart, targetY, t)
           const ampFactor = lerp(1.0, 0.0, t)
-          const currentOpacity = lerp(line.opacity, 0.0, t * 0.6)
-
-          const convergeLine = i === Math.floor(LINES_COUNT / 2)
+          const currentOpacity = lerp(line.opacity, 0.0, t)
 
           drawWavyLine(
             ctx, W, H,
@@ -224,43 +216,12 @@ export default function Minimalism() {
             line.thickness,
             ampFactor
           )
-
-          if (convergeLine) {
-            drawWavyLine(
-              ctx, W, H,
-              currentY,
-              line.amp1, line.amp2, line.amp3,
-              line.phase1, 0, 0,
-              0, 0, 0,
-              time, line.speed * 0.3,
-              'gold',
-              t * 0.45,
-              1.2,
-              ampFactor * 0.3
-            )
-          }
-        })
-      } else {
-        const holdT = Math.min(1, (elapsed - CHAOS_DURATION - CONVERGE_DURATION) / HOLD_DURATION)
-        const pulseTime = (elapsed - CHAOS_DURATION - CONVERGE_DURATION) / 1000
-
-        linesData.current.slice(0, 6).forEach((line) => {
-          drawWavyLine(
-            ctx, W, H,
-            targetY,
-            line.amp1 * 0.04, line.amp2 * 0.03, line.amp3 * 0.02,
-            line.freq1, line.freq2, line.freq3,
-            line.phase1, line.phase2, line.phase3,
-            pulseTime, line.speed * 0.15,
-            'white',
-            0.03 * holdT,
-            0.8,
-            1.0
-          )
         })
       }
 
-      rafRef.current = requestAnimationFrame(draw)
+      if (elapsed < CHAOS_DURATION + CONVERGE_DURATION) {
+        rafRef.current = requestAnimationFrame(draw)
+      }
     }
 
     rafRef.current = requestAnimationFrame(draw)
@@ -288,7 +249,7 @@ export default function Minimalism() {
 
       <CenterWrapper>
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 720, margin: '0 auto' }}>
-          {/* MINIMALISMO */}
+
           <div style={{
             display: 'flex', flexWrap: 'wrap',
             justifyContent: 'center',
@@ -312,7 +273,6 @@ export default function Minimalism() {
             ))}
           </div>
 
-          {/* Frase */}
           <p ref={phraseRef} style={{
             fontFamily: 'var(--FD)', fontStyle: 'italic',
             fontSize: 'clamp(18px, 2.2vw, 28px)', color: 'var(--gold)',
@@ -320,32 +280,33 @@ export default function Minimalism() {
             opacity: 0, transform: 'translateY(20px)',
             transition: 'opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1)',
           }}>
-            Na estética, no volume, no foco.
+            Trabalhamos com minimalismo.
           </p>
 
-          {/* Linha decorativa */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
             <div
               ref={lineRef}
               style={{
-                height: 1, width: 0, opacity: 0,
-                background: 'linear-gradient(90deg, transparent, rgba(201,169,110,0.6), transparent)',
+                height: 1,
+                width: 0,
+                opacity: 0,
+                background: 'linear-gradient(90deg, transparent, rgba(201,169,110,0.7), transparent)',
               }}
             />
           </div>
 
-          {/* Texto */}
           <p ref={textRef} style={{
             fontSize: 'clamp(14px, 1.5vw, 17px)', color: 'var(--muted)',
             lineHeight: 1.88, maxWidth: 460, margin: '0 auto',
             opacity: 0, transform: 'translateY(20px)',
             transition: 'opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1)',
           }}>
-            Removemos o que distrai.
+            Na estética, no volume, no foco. Removemos o que distrai.
             Cada escolha é intencional, cada silêncio tem peso.
             O que sobra é{' '}
             <em style={{ color: 'var(--goldlt)', fontStyle: 'italic' }}>intenção pura.</em>
           </p>
+
         </div>
       </CenterWrapper>
     </section>
