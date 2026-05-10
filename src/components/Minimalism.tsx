@@ -17,7 +17,7 @@ export default function Minimalism() {
 
   const linesData = useRef(
     Array.from({ length: LINES_COUNT }, () => ({
-      yStart: 5 + Math.random() * 90,
+      yStart: 8 + Math.random() * 84, // mais espaço nas bordas verticais
       amp1: 30 + Math.random() * 80,
       amp2: 20 + Math.random() * 60,
       amp3: 15 + Math.random() * 40,
@@ -131,15 +131,14 @@ export default function Minimalism() {
       thickness: number,
       ampFactor: number
     ) {
-      const margin = W * 0.12
-      const drawW = W - margin * 2
       const yCenter = H * yBase / 100
       const POINTS = 80
 
       ctx.beginPath()
       for (let p = 0; p <= POINTS; p++) {
-        const x = margin + (p / POINTS) * drawW
+        const x = (p / POINTS) * W                    // ← Sem margem lateral (full width)
         const xNorm = p / POINTS
+
         const wave =
           amp1 * ampFactor * Math.sin(xNorm * freq1 * Math.PI * 2 + phase1 + time * speed) +
           amp2 * ampFactor * Math.sin(xNorm * freq2 * Math.PI * 2 + phase2 + time * speed * 1.3) +
@@ -222,7 +221,6 @@ export default function Minimalism() {
         })
       }
 
-      // Continua animando apenas durante caos + convergência
       if (elapsed < CHAOS_DURATION + CONVERGE_DURATION + 100) {
         rafRef.current = requestAnimationFrame(draw)
       }
@@ -253,7 +251,7 @@ export default function Minimalism() {
 
       <CenterWrapper>
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 720, margin: '0 auto' }}>
-          {/* Título */}
+          {/* ... resto do JSX permanece igual ... */}
           <div style={{
             display: 'flex', flexWrap: 'wrap',
             justifyContent: 'center',
@@ -277,7 +275,6 @@ export default function Minimalism() {
             ))}
           </div>
 
-          {/* Frase */}
           <p ref={phraseRef} style={{
             fontFamily: 'var(--FD)', fontStyle: 'italic',
             fontSize: 'clamp(18px, 2.2vw, 28px)', color: 'var(--gold)',
@@ -288,7 +285,6 @@ export default function Minimalism() {
             Trabalhamos com minimalismo.
           </p>
 
-          {/* Linha decorativa */}
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
             <div
               ref={lineRef}
@@ -301,7 +297,6 @@ export default function Minimalism() {
             />
           </div>
 
-          {/* Texto */}
           <p ref={textRef} style={{
             fontSize: 'clamp(14px, 1.5vw, 17px)', color: 'var(--muted)',
             lineHeight: 1.88, maxWidth: 460, margin: '0 auto',
