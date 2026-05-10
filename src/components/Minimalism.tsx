@@ -15,23 +15,28 @@ export default function Minimalism() {
   const rafRef = useRef<number>(0)
   const startTimeRef = useRef<number>(0)
 
+  const isMobile = () => window.innerWidth < 768
+
   const linesData = useRef(
-    Array.from({ length: LINES_COUNT }, () => ({
-      yStart: 15 + Math.random() * 70,        // mais centralizado
-      amp1: 22 + Math.random() * 48,          // amplitudes reduzidas
-      amp2: 14 + Math.random() * 35,
-      amp3: 9 + Math.random() * 25,
-      freq1: 0.8 + Math.random() * 2.3,
-      freq2: 1.1 + Math.random() * 2.7,
-      freq3: 0.5 + Math.random() * 1.4,
-      phase1: Math.random() * Math.PI * 2,
-      phase2: Math.random() * Math.PI * 2,
-      phase3: Math.random() * Math.PI * 2,
-      speed: 0.35 + Math.random() * 0.65,
-      opacity: 0.1 + Math.random() * 0.28,
-      thickness: 0.7 + Math.random() * 1.4,
-      color: Math.random() > 0.6 ? 'crimson' : Math.random() > 0.5 ? 'gold' : 'white',
-    }))
+    Array.from({ length: LINES_COUNT }, () => {
+      const mobile = isMobile()
+      return {
+        yStart: mobile ? 18 + Math.random() * 64 : 15 + Math.random() * 70,
+        amp1: mobile ? 14 + Math.random() * 28 : 22 + Math.random() * 48,
+        amp2: mobile ? 9 + Math.random() * 20 : 14 + Math.random() * 35,
+        amp3: mobile ? 6 + Math.random() * 14 : 9 + Math.random() * 25,
+        freq1: 0.8 + Math.random() * 2.3,
+        freq2: 1.1 + Math.random() * 2.7,
+        freq3: 0.5 + Math.random() * 1.4,
+        phase1: Math.random() * Math.PI * 2,
+        phase2: Math.random() * Math.PI * 2,
+        phase3: Math.random() * Math.PI * 2,
+        speed: mobile ? 0.3 + Math.random() * 0.5 : 0.35 + Math.random() * 0.65,
+        opacity: mobile ? 0.08 + Math.random() * 0.22 : 0.1 + Math.random() * 0.28,
+        thickness: mobile ? 0.6 + Math.random() * 1.1 : 0.7 + Math.random() * 1.4,
+        color: Math.random() > 0.6 ? 'crimson' : Math.random() > 0.5 ? 'gold' : 'white',
+      }
+    })
   )
 
   useEffect(() => {
@@ -111,6 +116,7 @@ export default function Minimalism() {
     const dpr = window.devicePixelRatio || 1
     const CHAOS_DURATION = 2500
     const CONVERGE_DURATION = 2000
+    const isMobileDevice = isMobile()
 
     startTimeRef.current = performance.now()
 
@@ -131,7 +137,7 @@ export default function Minimalism() {
       thickness: number,
       ampFactor: number
     ) {
-      const PADDING = 22                    // Margem de segurança vertical
+      const PADDING = isMobileDevice ? 28 : 22
       const safeHeight = H - PADDING * 2
       const yCenter = PADDING + (safeHeight * (yBase / 100))
 
@@ -147,30 +153,26 @@ export default function Minimalism() {
           amp2 * ampFactor * Math.sin(xNorm * freq2 * Math.PI * 2 + phase2 + time * speed * 1.3) +
           amp3 * ampFactor * Math.sin(xNorm * freq3 * Math.PI * 2 + phase3 + time * speed * 0.7)
 
-        // Limita a amplitude perto das bordas para evitar corte
-        const edgeFactor = Math.max(0.15, 1 - Math.pow(Math.abs(yBase - 50) / 50, 1.8))
+        const edgeFactor = Math.max(0.2, 1 - Math.pow(Math.abs(yBase - 50) / 50, 1.8))
         wave *= edgeFactor
 
         let y = yCenter + wave
-
-        // Clamp forte
-        y = Math.max(PADDING + 4, Math.min(H - PADDING - 4, y))
+        y = Math.max(PADDING + 6, Math.min(H - PADDING - 6, y))
 
         if (p === 0) ctx.moveTo(x, y)
         else ctx.lineTo(x, y)
       }
 
-      // Cores e estilos
       if (color === 'gold') {
         ctx.strokeStyle = `rgba(201,169,110,${opacity.toFixed(2)})`
         ctx.shadowColor = 'rgba(201,169,110,0.5)'
-        ctx.shadowBlur = 7 * ampFactor + 2
+        ctx.shadowBlur = isMobileDevice ? 5 * ampFactor : 7 * ampFactor + 2
       } else if (color === 'crimson') {
         ctx.strokeStyle = `rgba(139,0,0,${opacity.toFixed(2)})`
-        ctx.shadowColor = 'rgba(139,0,0,0.45)'
-        ctx.shadowBlur = 5 * ampFactor
+        ctx.shadowColor = 'rgba(139,0,0,0.4)'
+        ctx.shadowBlur = isMobileDevice ? 3 * ampFactor : 5 * ampFactor
       } else {
-        ctx.strokeStyle = `rgba(242,237,230,${(opacity * 0.38).toFixed(2)})`
+        ctx.strokeStyle = `rgba(242,237,230,${(opacity * 0.35).toFixed(2)})`
         ctx.shadowBlur = 0
       }
 
@@ -195,7 +197,7 @@ export default function Minimalism() {
 
       const elapsed = now - startTimeRef.current
       const time = elapsed / 1000
-      const targetY = 56
+      const targetY = isMobileDevice ? 55 : 56
 
       if (elapsed < CHAOS_DURATION) {
         linesData.current.forEach(line => {
@@ -232,7 +234,7 @@ export default function Minimalism() {
         })
       }
 
-      if (elapsed < CHAOS_DURATION + CONVERGE_DURATION + 200) {
+      if (elapsed < CHAOS_DURATION + CONVERGE_DURATION + 300) {
         rafRef.current = requestAnimationFrame(draw)
       }
     }
@@ -262,7 +264,7 @@ export default function Minimalism() {
 
       <CenterWrapper>
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 720, margin: '0 auto' }}>
-          {/* Título */}
+          {/* Título, frase, linha e texto (mesmo de antes) */}
           <div style={{
             display: 'flex', flexWrap: 'wrap',
             justifyContent: 'center',
@@ -286,7 +288,6 @@ export default function Minimalism() {
             ))}
           </div>
 
-          {/* Frase */}
           <p ref={phraseRef} style={{
             fontFamily: 'var(--FD)', fontStyle: 'italic',
             fontSize: 'clamp(18px, 2.2vw, 28px)', color: 'var(--gold)',
@@ -294,10 +295,9 @@ export default function Minimalism() {
             opacity: 0, transform: 'translateY(20px)',
             transition: 'opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1)',
           }}>
-            Na estética, no volume, no foco.
+            Trabalhamos com minimalismo.
           </p>
 
-          {/* Linha decorativa */}
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
             <div
               ref={lineRef}
@@ -310,15 +310,13 @@ export default function Minimalism() {
             />
           </div>
 
-          {/* Texto */}
           <p ref={textRef} style={{
             fontSize: 'clamp(14px, 1.5vw, 17px)', color: 'var(--muted)',
             lineHeight: 1.88, maxWidth: 460, margin: '0 auto',
             opacity: 0, transform: 'translateY(20px)',
             transition: 'opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1)',
           }}>
-            Removemos o que distrai.
-            
+            Na estética, no volume, no foco. Removemos o que distrai.
             Cada escolha é intencional, cada silêncio tem peso.
             O que sobra é{' '}
             <em style={{ color: 'var(--goldlt)', fontStyle: 'italic' }}>intenção pura.</em>
