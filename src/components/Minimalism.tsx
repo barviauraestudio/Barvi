@@ -318,7 +318,7 @@ export default function Minimalism() {
             opacity: 0, transform: 'translateY(20px)',
             transition: 'opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1)',
           }}>
-            Trabalhamos com minimalismo.
+            Na estética, no volume, no foco.
           </p>
 
           {/* Linha decorativa */}
@@ -339,7 +339,7 @@ export default function Minimalism() {
             opacity: 0, transform: 'translateY(20px)',
             transition: 'opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1)',
           }}>
-            Na estética, no volume, no foco. Removemos o que distrai.
+            Removemos o que distrai.
             Cada escolha é intencional, cada silêncio tem peso.
             O que sobra é{' '}
             <em style={{ color: 'var(--goldlt)', fontStyle: 'italic' }}>intenção pura.</em>
