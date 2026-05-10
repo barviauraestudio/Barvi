@@ -17,20 +17,19 @@ export default function Minimalism() {
 
   const linesData = useRef(
     Array.from({ length: LINES_COUNT }, () => ({
-      // Margem vertical maior para evitar corte no topo e fundo
-      yStart: 12 + Math.random() * 76,
-      amp1: 28 + Math.random() * 65,
-      amp2: 18 + Math.random() * 50,
-      amp3: 12 + Math.random() * 35,
-      freq1: 0.8 + Math.random() * 2.5,
-      freq2: 1.2 + Math.random() * 3,
-      freq3: 0.5 + Math.random() * 1.5,
+      yStart: 15 + Math.random() * 70,        // mais centralizado
+      amp1: 22 + Math.random() * 48,          // amplitudes reduzidas
+      amp2: 14 + Math.random() * 35,
+      amp3: 9 + Math.random() * 25,
+      freq1: 0.8 + Math.random() * 2.3,
+      freq2: 1.1 + Math.random() * 2.7,
+      freq3: 0.5 + Math.random() * 1.4,
       phase1: Math.random() * Math.PI * 2,
       phase2: Math.random() * Math.PI * 2,
       phase3: Math.random() * Math.PI * 2,
-      speed: 0.4 + Math.random() * 0.8,
-      opacity: 0.12 + Math.random() * 0.32,
-      thickness: 0.8 + Math.random() * 1.6,
+      speed: 0.35 + Math.random() * 0.65,
+      opacity: 0.1 + Math.random() * 0.28,
+      thickness: 0.7 + Math.random() * 1.4,
       color: Math.random() > 0.6 ? 'crimson' : Math.random() > 0.5 ? 'gold' : 'white',
     }))
   )
@@ -132,41 +131,46 @@ export default function Minimalism() {
       thickness: number,
       ampFactor: number
     ) {
-      const VERTICAL_PADDING = 18   // ← Margem de segurança vertical
-      const safeH = H - VERTICAL_PADDING * 2
-      const yCenter = VERTICAL_PADDING + (safeH * yBase / 100)
+      const PADDING = 22                    // Margem de segurança vertical
+      const safeHeight = H - PADDING * 2
+      const yCenter = PADDING + (safeHeight * (yBase / 100))
 
-      const POINTS = 90
+      const POINTS = 95
 
       ctx.beginPath()
       for (let p = 0; p <= POINTS; p++) {
         const x = (p / POINTS) * W
         const xNorm = p / POINTS
 
-        const wave =
+        let wave =
           amp1 * ampFactor * Math.sin(xNorm * freq1 * Math.PI * 2 + phase1 + time * speed) +
           amp2 * ampFactor * Math.sin(xNorm * freq2 * Math.PI * 2 + phase2 + time * speed * 1.3) +
           amp3 * ampFactor * Math.sin(xNorm * freq3 * Math.PI * 2 + phase3 + time * speed * 0.7)
 
+        // Limita a amplitude perto das bordas para evitar corte
+        const edgeFactor = Math.max(0.15, 1 - Math.pow(Math.abs(yBase - 50) / 50, 1.8))
+        wave *= edgeFactor
+
         let y = yCenter + wave
 
-        // Clamp para garantir que nunca saia dos limites da seção
-        y = Math.max(VERTICAL_PADDING + 5, Math.min(H - VERTICAL_PADDING - 5, y))
+        // Clamp forte
+        y = Math.max(PADDING + 4, Math.min(H - PADDING - 4, y))
 
         if (p === 0) ctx.moveTo(x, y)
         else ctx.lineTo(x, y)
       }
 
+      // Cores e estilos
       if (color === 'gold') {
         ctx.strokeStyle = `rgba(201,169,110,${opacity.toFixed(2)})`
         ctx.shadowColor = 'rgba(201,169,110,0.5)'
-        ctx.shadowBlur = 8 * ampFactor + 2
+        ctx.shadowBlur = 7 * ampFactor + 2
       } else if (color === 'crimson') {
         ctx.strokeStyle = `rgba(139,0,0,${opacity.toFixed(2)})`
-        ctx.shadowColor = 'rgba(139,0,0,0.4)'
-        ctx.shadowBlur = 6 * ampFactor
+        ctx.shadowColor = 'rgba(139,0,0,0.45)'
+        ctx.shadowBlur = 5 * ampFactor
       } else {
-        ctx.strokeStyle = `rgba(242,237,230,${(opacity * 0.4).toFixed(2)})`
+        ctx.strokeStyle = `rgba(242,237,230,${(opacity * 0.38).toFixed(2)})`
         ctx.shadowBlur = 0
       }
 
@@ -191,7 +195,7 @@ export default function Minimalism() {
 
       const elapsed = now - startTimeRef.current
       const time = elapsed / 1000
-      const targetY = 57
+      const targetY = 56
 
       if (elapsed < CHAOS_DURATION) {
         linesData.current.forEach(line => {
@@ -228,7 +232,7 @@ export default function Minimalism() {
         })
       }
 
-      if (elapsed < CHAOS_DURATION + CONVERGE_DURATION + 100) {
+      if (elapsed < CHAOS_DURATION + CONVERGE_DURATION + 200) {
         rafRef.current = requestAnimationFrame(draw)
       }
     }
@@ -258,7 +262,7 @@ export default function Minimalism() {
 
       <CenterWrapper>
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 720, margin: '0 auto' }}>
-          {/* Título, frase, linha e texto permanecem iguais */}
+          {/* Título */}
           <div style={{
             display: 'flex', flexWrap: 'wrap',
             justifyContent: 'center',
@@ -282,6 +286,7 @@ export default function Minimalism() {
             ))}
           </div>
 
+          {/* Frase */}
           <p ref={phraseRef} style={{
             fontFamily: 'var(--FD)', fontStyle: 'italic',
             fontSize: 'clamp(18px, 2.2vw, 28px)', color: 'var(--gold)',
@@ -292,6 +297,7 @@ export default function Minimalism() {
             Trabalhamos com minimalismo.
           </p>
 
+          {/* Linha decorativa */}
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
             <div
               ref={lineRef}
@@ -304,6 +310,7 @@ export default function Minimalism() {
             />
           </div>
 
+          {/* Texto */}
           <p ref={textRef} style={{
             fontSize: 'clamp(14px, 1.5vw, 17px)', color: 'var(--muted)',
             lineHeight: 1.88, maxWidth: 460, margin: '0 auto',
