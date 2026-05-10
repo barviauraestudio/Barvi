@@ -16,7 +16,7 @@ import Footer from './components/Footer'
 import AudioPlayer from './components/AudioPlayer'
 import { useBlurSiblings } from './components/useBlurSiblings'
 import EmailPopup from './components/EmailPopup'
-import { Analytics } from '@vercel/analytics/react'
+import Minimalism from './components/Minimalism'
 
 function BackToTop() {
   const [visible, setVisible] = useState(false)
@@ -125,6 +125,7 @@ function App() {
       <Nav menuOpen={menuOpen} onToggle={toggleMenu} />
       <Hero />
       <Manifesto />
+      <Minimalism />
       <Pillars />
       <Psychology />
       <Palette />
@@ -135,7 +136,6 @@ function App() {
       <AudioPlayer src="/SITE-AURA-AUDIO.MP3" />
       <BackToTop />
       <EmailPopup />
-      <Analytics />
     </>
   )
 }
