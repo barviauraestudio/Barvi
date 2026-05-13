@@ -1,13 +1,16 @@
-type Props = {
-  children: React.ReactNode
-}
+import type { CSSProperties } from 'react';
 
-export default function CenterWrapper({ children }: Props) {
+type Props = {
+  children: React.ReactNode;
+  style?: CSSProperties;
+};
+
+export default function CenterWrapper({ children, style }: Props) {
   return (
-    <div className="cw">
+    <div className="cw" style={style}>
       <div className="cw-inner">
         {children}
       </div>
     </div>
-  )
+  );
 }

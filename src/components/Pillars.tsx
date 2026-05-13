@@ -1,5 +1,7 @@
 import Reveal from './Reveal'
 import CenterWrapper from './CenterWrapper'
+import BorderGlow from './BorderGlow'
+import FadeContent from './FadeContent'
 
 const PILLARS = [
   {
@@ -34,14 +36,32 @@ export default function Pillars() {
           <h2 className="section-title">Os três <em>pilares</em></h2>
           <div className="section-rule" />
         </Reveal>
+
         <Reveal className="pillars-grid">
           {PILLARS.map((p, i) => (
-            <Reveal key={p.num} delay={(i + 1) as 1 | 2 | 3} className="pillar-card">
-              <span className="pillar-num">{p.num}</span>
-              <p className="pillar-title"><em>{p.title}</em></p>
-              <p style={{ fontSize: 12, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--golddm)', marginBottom: 18 }}>{p.subtitle}</p>
-              <p className="pillar-desc">{p.desc}</p>
-              <p className="pillar-kicker">{p.kicker}</p>
+            <Reveal key={p.num} delay={(i + 1) as 1 | 2 | 3} className="h-full">
+              <FadeContent duration={700} delay={i * 120} blur className="h-full">
+                <BorderGlow
+                  className="pillar-card h-full"
+                  backgroundColor="rgba(10,3,5,0.7)"
+                  borderRadius={12}
+                  glowColor="36 65 65"
+                  colors={['#C9A96E', '#8B0000', '#A8883A']}
+                  glowIntensity={0.85}
+                  glowRadius={32}
+                  edgeSensitivity={28}
+                  coneSpread={20}
+                  fillOpacity={0.18}
+                >
+                  <div style={{ padding: '36px 32px', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <span className="pillar-num">{p.num}</span>
+                    <p className="pillar-title"><em>{p.title}</em></p>
+                    <p style={{ fontSize: 12, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--golddm)', marginBottom: 18 }}>{p.subtitle}</p>
+                    <p className="pillar-desc">{p.desc}</p>
+                    <p className="pillar-kicker" style={{ marginTop: 'auto' }}>{p.kicker}</p>
+                  </div>
+                </BorderGlow>
+              </FadeContent>
             </Reveal>
           ))}
         </Reveal>

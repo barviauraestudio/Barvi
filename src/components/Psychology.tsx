@@ -1,5 +1,7 @@
 import Reveal from './Reveal'
 import CenterWrapper from './CenterWrapper'
+import BorderGlow from './BorderGlow'
+import FadeContent from './FadeContent'
 
 const STATES = [
   {
@@ -36,28 +38,45 @@ export default function Psychology() {
 
         <div className="psych-layout">
           <Reveal>
-            <p className="psych-lead">
-              Toda decisão humana começa no <em>sistema límbico.</em>
-            </p>
-            <p className="psych-body">
-              A parte do cérebro que processa emoção, memória e pertencimento, antes de passar pelo racional que tenta justificar o que já foi decidido.
-            </p>
-            <p className="psych-body">
-              Sabendo disso, cada palavra que escrevemos, cada frame que direcionamos, cada detalhe estético que escolhemos é projetado para ativar estados emocionais específicos no seu público.
-            </p>
-            <p className="psych-body" style={{ fontStyle: 'italic', color: 'var(--goldlt)', fontSize: 17 }}>
-              "Não fazemos comunicação por intuição. Fazemos comunicação por neurociência aplicada — com a elegância de quem entende que o maior poder não é gritar mais alto, é sussurrar na frequência certa."
-            </p>
+            <FadeContent duration={800} blur>
+              <p className="psych-lead">
+                Toda decisão humana começa no <em>sistema límbico.</em>
+              </p>
+              <p className="psych-body">
+                A parte do cérebro que processa emoção, memória e pertencimento, antes de passar pelo racional que tenta justificar o que já foi decidido.
+              </p>
+              <p className="psych-body">
+                Sabendo disso, cada palavra que escrevemos, cada frame que direcionamos, cada detalhe estético que escolhemos é projetado para ativar estados emocionais específicos no seu público.
+              </p>
+              <p className="psych-body" style={{ fontStyle: 'italic', color: 'var(--goldlt)', fontSize: 17 }}>
+                "Não fazemos comunicação por intuição. Fazemos comunicação por neurociência aplicada — com a elegância de quem entende que o maior poder não é gritar mais alto, é sussurrar na frequência certa."
+              </p>
+            </FadeContent>
           </Reveal>
 
           <Reveal delay={2}>
             <div className="psych-states">
               {STATES.map((s, i) => (
-                <div className="psych-state" key={i}>
-                  <p className="psych-state-label">{s.label}</p>
-                  <p className="psych-state-title">{s.title}</p>
-                  <p className="psych-state-desc">{s.desc}</p>
-                </div>
+                <FadeContent key={i} duration={600} delay={i * 100} blur className="h-full">
+                  <BorderGlow
+                    className="psych-state h-full"
+                    backgroundColor="rgba(8,2,5,0.6)"
+                    borderRadius={12}
+                    glowColor="36 65 65"
+                    colors={['#C9A96E', '#8B0000', '#A8883A']}
+                    glowIntensity={0.7}
+                    glowRadius={24}
+                    edgeSensitivity={32}
+                    coneSpread={22}
+                    fillOpacity={0.12}
+                  >
+                    <div style={{ padding: '24px 22px', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                      <p className="psych-state-label">{s.label}</p>
+                      <p className="psych-state-title">{s.title}</p>
+                      <p className="psych-state-desc" style={{ marginTop: 'auto' }}>{s.desc}</p>
+                    </div>
+                  </BorderGlow>
+                </FadeContent>
               ))}
             </div>
           </Reveal>
@@ -65,37 +84,23 @@ export default function Psychology() {
 
         <div className="psych-layout" style={{ marginTop: 80 }}>
           <Reveal>
-            <p className="section-eyebrow" style={{ marginBottom: 28 }}>Nossa Diferença</p>
-            <p className="psych-lead">
-              Autoridade não se declara.<br /><em>Se constrói detalhe por detalhe, intenção por intenção.</em>
-            </p>
-            <p className="psych-body">
-              Enquanto o mercado produz em volume, nós produzimos em profundidade. Enquanto outros entregam postagens, nós entregamos posicionamento psicológico. Enquanto a maioria fala de métricas, nós falamos de percepção de valor.
-            </p>
-            <p className="psych-body">
-              O nosso diferencial não está na ferramenta. Está na visão. Na capacidade de olhar para uma marca e enxergar não o que ela é hoje, mas o que ela pode se tornar quando cada ponto de contato com o público é pensado com intenção estratégica, profundidade estética e inteligência narrativa.
-            </p>
-            <p className="psych-body" style={{ fontStyle: 'italic', color: 'var(--goldlt)', fontSize: 15, marginTop: 4 }}>
-              Isso não se compra em pacotes. Isso se constrói em parceria.
-            </p>
+            <FadeContent duration={800} blur>
+              <p className="section-eyebrow" style={{ marginBottom: 28 }}>Nossa Diferença</p>
+              <p className="psych-lead">
+                Autoridade não se declara.<br /><em>Se constrói detalhe por detalhe, intenção por intenção.</em>
+              </p>
+              <p className="psych-body">
+                Enquanto o mercado produz em volume, nós produzimos em profundidade. Enquanto outros entregam postagens, nós entregamos posicionamento psicológico. Enquanto a maioria fala de métricas, nós falamos de percepção de valor.
+              </p>
+              <p className="psych-body">
+                O nosso diferencial não está na ferramenta. Está na visão. Na capacidade de olhar para uma marca e enxergar não o que ela é hoje, mas o que ela pode se tornar quando cada ponto de contato com o público é pensado com intenção estratégica, profundidade estética e inteligência narrativa.
+              </p>
+              <p className="psych-body" style={{ fontStyle: 'italic', color: 'var(--goldlt)', fontSize: 15, marginTop: 4 }}>
+                Isso não se compra em pacotes. Isso se constrói em parceria.
+              </p>
+            </FadeContent>
           </Reveal>
-          <Reveal delay={2}>
-            <div className="autoridade-pillars">
-              {[
-                { num: '01', title: 'Posicionamento', sub: 'Estratégico' },
-                { num: '02', title: 'Direção', sub: 'Criativa' },
-                { num: '03', title: 'Inteligência', sub: 'Narrativa' },
-              ].map((item) => (
-                <div className="autoridade-item" key={item.num}>
-                  <span className="autoridade-num">{item.num}</span>
-                  <div className="autoridade-text">
-                    <p className="autoridade-title">{item.title}</p>
-                    <p className="autoridade-sub">{item.sub}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Reveal>
+
         </div>
       </CenterWrapper>
     </section>

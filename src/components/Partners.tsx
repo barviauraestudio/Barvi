@@ -1,5 +1,6 @@
 import Reveal from './Reveal'
 import CenterWrapper from './CenterWrapper'
+import BorderGlow from './BorderGlow'
 
 const ALL_PARTNERS = [
   'Sarah Thiesen',
@@ -21,102 +22,183 @@ const ALL_PARTNERS = [
 ]
 
 export default function Partners() {
+  // Duplicamos a lista para criar o efeito de loop infinito
+  const doubledPartners = [...ALL_PARTNERS, ...ALL_PARTNERS]
+
   return (
-    <section 
-      id="parceiros" 
+    <section
+      id="parceiros"
       className="section"
-      style={{ 
-        padding: '80px 0 100px',
+      style={{
+        padding: '60px 0',
+        minHeight: 'auto',
+        overflow: 'hidden',
+        border: 'none',
+        borderBottom: 'none',
+        background: 'transparent'
       }}
     >
       <CenterWrapper>
-        <Reveal className="section-header" style={{ marginBottom: 40 }}>
+        <Reveal className="section-header" style={{ marginBottom: 30, textAlign: 'center' }}>
           <p className="section-eyebrow">PRODUÇÕES E PARCEIROS</p>
-          <h2 className="section-title" style={{ 
-            fontSize: 'clamp(32px, 5.5vw, 52px)', 
+          <h2 className="section-title" style={{
+            fontSize: 'clamp(28px, 4vw, 42px)',
             lineHeight: 1.1,
-            marginBottom: 16 
+            marginBottom: 12
           }}>
             Marcas que <em style={{ color: 'var(--gold)' }}>acreditaram</em>
           </h2>
         </Reveal>
-
-        <Reveal style={{ marginBottom: 50 }}>
-          <p className="partners-intro" style={{
-            fontSize: 'clamp(15px, 1.8vw, 17px)',
-            maxWidth: '680px',
-            lineHeight: 1.7,
-            color: 'var(--muted)',
-            textAlign: 'center',
-            margin: '0 auto'
-          }}>
-            Ao longo da trajetória, desenvolvemos produções criativas e estratégicas 
-            ao lado de parceiros que acreditam no poder da comunicação bem-feita.
-          </p>
-        </Reveal>
-
-        <Reveal>
-          <div className="partners-grid">
-            {ALL_PARTNERS.map((name, index) => (
-              <div key={index} className="partner-item">
-                <p className="partner-name">{name}</p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
       </CenterWrapper>
+
+      <div className="partners-marquee-container">
+        <div className="partners-marquee-track">
+          {doubledPartners.map((item, index) => {
+            const [name, category] = item.includes(' — ') ? item.split(' — ') : [item, 'Produção'];
+            return (
+              <div key={index} className="partner-card-wrapper">
+                <BorderGlow
+                  className="partner-card"
+                  backgroundColor="rgba(8,2,5,0.6)"
+                  borderRadius={12}
+                  glowColor="36 65 65"
+                  colors={['#C9A96E', '#8B0000', '#A8883A']}
+                  glowIntensity={0.6}
+                  glowRadius={24}
+                  edgeSensitivity={32}
+                  coneSpread={22}
+                  fillOpacity={0.12}
+                >
+                  <div className="partner-card-content">
+                    <p className="partner-label">BARVÍ PARCEIRO</p>
+                    <h3 className="partner-title"><em>{name}</em></h3>
+                    <p className="partner-desc">{category}</p>
+                  </div>
+                </BorderGlow>
+              </div>
+            )
+          })}
+        </div>
+      </div>
 
       <style dangerouslySetInnerHTML={{
         __html: `
-          .partners-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 12px 40px;
-            max-width: 1100px;
-            margin: 0 auto;
+          .partners-marquee-container {
+            width: 100%;
+            overflow: hidden;
+            padding: 20px 0;
+            position: relative;
+            border: none !important;
+            border-bottom: 0 !important;
+            border-top: 0 !important;
+            outline: none !important;
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
           }
 
-          .partner-item {
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(201, 169, 110, 0.08);
+          .partners-marquee-track {
+            display: flex;
+            gap: 16px;
+            width: max-content;
+            animation: marquee 50s linear infinite;
           }
 
-          .partner-name {
+          .partner-card-wrapper {
+            flex-shrink: 0;
+            width: 240px;
+          }
+
+          .partner-card {
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--glass-border) !important;
+            box-shadow: none !important;
+          }
+
+          .partner-card-content {
+            padding: 20px 18px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+          }
+
+          .partner-label {
+            font-size: 7px;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--golddm);
+            margin-bottom: 6px;
+          }
+
+          .partner-title {
             font-family: var(--FD);
-            font-size: clamp(15px, 1.6vw, 16.5px);
-            font-weight: 300;
-            letter-spacing: 0.015em;
-            color: var(--white);
+            font-size: 18px;
+            color: var(--gold);
+            line-height: 1.1;
             margin: 0;
+            font-weight: 300;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
 
-          /* Hover apenas em telas maiores */
-          @media (hover: hover) {
-            .partner-item:hover {
-              transform: translateX(6px);
-              border-bottom-color: rgba(201, 169, 110, 0.3);
-            }
-            .partner-item:hover .partner-name {
-              color: var(--gold);
-            }
+          .partner-desc {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.4;
+            margin-top: 6px;
+            opacity: 0.6;
           }
 
-          /* Mobile - Muito mais compacto */
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+
+          /* Pausa no hover */
+          .partners-marquee-container:hover .partners-marquee-track {
+            animation-play-state: paused;
+          }
+
+          /* Mobile adjustments */
           @media (max-width: 640px) {
-            .partners-grid {
-              grid-template-columns: 1fr;
-              gap: 8px 0;
+            .partner-card-wrapper {
+              width: 190px;
             }
-            
-            .partner-item {
-              padding: 4px 0;
-              border-bottom: 1px solid rgba(201, 169, 110, 0.06);
+            .partner-title {
+              font-size: 15px;
             }
-
+            .partners-marquee-track {
+              animation-duration: 35s;
+            }
             .section {
-              padding-top: 70px !important;
-              padding-bottom: 90px !important;
+              padding: 40px 0 !important;
             }
+          }
+
+          /* Efeito de Blur Siblings (Foco no Hover) */
+          .partners-marquee-track {
+            transition: gap 0.3s ease;
+          }
+
+          .partners-marquee-track:hover .partner-card-wrapper {
+            filter: blur(2px);
+            transform: scale(0.95);
+          }
+
+          .partners-marquee-track .partner-card-wrapper:hover {
+            filter: blur(0px) !important;
+            transform: scale(1.05) !important;
+            z-index: 10;
+          }
+
+          /* Suavizar a transição dos cards */
+          .partner-card-wrapper {
+            transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1), 
+                        filter 0.4s ease, 
+                        opacity 0.4s ease;
           }
         `
       }} />

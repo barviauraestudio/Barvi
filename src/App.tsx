@@ -17,6 +17,7 @@ import AudioPlayer from './components/AudioPlayer'
 import { useBlurSiblings } from './components/useBlurSiblings'
 import EmailPopup from './components/EmailPopup'
 import Minimalism from './components/Minimalism'
+import SoftAurora from './components/SoftAurora'
 
 function BackToTop() {
   const [visible, setVisible] = useState(false)
@@ -97,11 +98,11 @@ function BackToTop() {
 }
 
 function App() {
-  // Hooks devem ficar no topo
   useBlurSiblings(".pillars-grid", ".pillar-card");
   useBlurSiblings(".psych-states", ".psych-state");
   useBlurSiblings(".testimonials-grid", ".testimonial-card");
   useBlurSiblings(".manifesto-tagline", ".manifesto-pill");
+  useBlurSiblings(".partners-marquee-track", ".partner-card-wrapper");
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -119,6 +120,27 @@ function App() {
 
   return (
     <>
+      {/* SoftAurora — fixed background, all sections scroll over it */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: -2, overflow: 'hidden' }}>
+        <SoftAurora
+          speed={0.6}
+          scale={1.5}
+          brightness={1.2}
+          color1="#f7f7f7"
+          color2="#ff0000"
+          noiseFrequency={2.5}
+          noiseAmplitude={1}
+          bandHeight={0.5}
+          bandSpread={1}
+          octaveDecay={0.1}
+          layerOffset={0}
+          colorSpeed={1}
+          enableMouseInteraction
+          mouseInfluence={0.25}
+        />
+      </div>
+      {/* Película suavizada para dar mais vida à aurora */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: -1, background: 'rgba(6,2,4,0.30)', pointerEvents: 'none' }} />
       <Cursor />
       <ScrollProgress />
       <MobileMenu open={menuOpen} onClose={closeMenu} />
