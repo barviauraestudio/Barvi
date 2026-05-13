@@ -952,6 +952,7 @@ nav.scrolled::before {
   letter-spacing: 0.3em; text-transform: uppercase; text-decoration: none;
   border: none; cursor: pointer;
   position: relative; overflow: hidden;
+  border-radius: 12px;
   transition: background 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s;
 }
 .btn-primary::after {
@@ -974,6 +975,7 @@ nav.scrolled::before {
   letter-spacing: 0.3em; text-transform: uppercase; text-decoration: none;
   border: 1px solid var(--glass-border); cursor: pointer;
   position: relative; overflow: hidden; isolation: isolate;
+  border-radius: 12px;
   will-change: transform;
   transition: var(--glass-trans), color 0.3s;
 }
