@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 
-import Cursor from './components/Cursor'
 import ScrollProgress from './components/ScrollProgress'
 import Nav from './components/Nav'
 import MobileMenu from './components/MobileMenu'
@@ -141,7 +140,6 @@ function App() {
       </div>
       {/* Película suavizada para dar mais vida à aurora */}
       <div style={{ position: 'fixed', inset: 0, zIndex: -1, background: 'rgba(6,2,4,0.30)', pointerEvents: 'none' }} />
-      <Cursor />
       <ScrollProgress />
       <MobileMenu open={menuOpen} onClose={closeMenu} />
       <Nav menuOpen={menuOpen} onToggle={toggleMenu} />
