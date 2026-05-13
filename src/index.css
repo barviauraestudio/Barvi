@@ -80,7 +80,6 @@ body {
   font-weight: 300;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  cursor: none;
 }
 
 /* ─── CUSTOM CURSOR ─────────────────────────────── */
@@ -944,7 +943,7 @@ nav.scrolled::before {
   padding: 16px 40px; background: var(--gold);
   color: var(--black); font-family: var(--FB); font-size: 11px; font-weight: 600;
   letter-spacing: 0.3em; text-transform: uppercase; text-decoration: none;
-  border: none; cursor: none;
+  border: none; cursor: pointer;
   position: relative; overflow: hidden;
   transition: background 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s;
 }
@@ -966,7 +965,7 @@ nav.scrolled::before {
   box-shadow: var(--glass-inset), var(--glass-shadow);
   color: var(--white); font-family: var(--FB); font-size: 11px; font-weight: 400;
   letter-spacing: 0.3em; text-transform: uppercase; text-decoration: none;
-  border: 1px solid var(--glass-border); cursor: none;
+  border: 1px solid var(--glass-border); cursor: pointer;
   position: relative; overflow: hidden; isolation: isolate;
   will-change: transform;
   transition: var(--glass-trans), color 0.3s;
