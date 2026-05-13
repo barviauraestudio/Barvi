@@ -102,6 +102,7 @@ function App() {
   useBlurSiblings(".psych-states", ".psych-state");
   useBlurSiblings(".testimonials-grid", ".testimonial-card");
   useBlurSiblings(".manifesto-tagline", ".manifesto-pill");
+  useBlurSiblings(".partners-marquee-track", ".partner-card-wrapper");
 
   const [menuOpen, setMenuOpen] = useState(false);
 
