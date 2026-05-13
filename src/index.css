@@ -83,6 +83,12 @@ body {
 }
 
 /* ─── CUSTOM CURSOR ─────────────────────────────── */
+#cursor, #cursor-ring {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 #cursor {
   position: fixed;
   width: 10px; height: 10px;
